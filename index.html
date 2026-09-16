@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cosmic Crackers - Diwali Price List 2026</title>
   
-  <!-- Updated & Working jsPDF + AutoTable CDNs -->
+  <!-- jsPDF & AutoTable CDNs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 
@@ -30,6 +30,7 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       padding-bottom: 140px;
+      overflow-x: hidden; /* Strictly prevents horizontal body scrolling */
     }
 
     header {
@@ -65,6 +66,7 @@
       max-width: 1200px;
       margin: 1.5rem auto;
       padding: 0 1rem;
+      width: 100%;
     }
 
     .search-box {
@@ -82,60 +84,51 @@
       border-color: var(--secondary-color);
     }
 
-    /* Scroll tip for mobiles */
-    .scroll-hint {
-      display: none;
-      font-size: 0.8rem;
-      color: #6c757d;
-      text-align: right;
-      margin-bottom: 0.5rem;
-      font-style: italic;
-    }
-
     .table-container {
       width: 100%;
-      overflow-x: auto;
       background: white;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      -webkit-overflow-scrolling: touch;
       margin-bottom: 1rem;
       border: 1px solid var(--border-color);
+      overflow-x: hidden; /* Prevents container scroll */
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      text-align: left;
-      min-width: 680px; /* Forces horizontal scroll on smaller viewports */
+      table-layout: fixed; /* Forces table to obey strict container sizing */
     }
 
     th, td {
-      padding: 12px 14px;
+      padding: 10px 6px;
       border-bottom: 1px solid var(--border-color);
-      white-space: nowrap; /* Prevents awkward text wrapping inside cells during scrolling */
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      font-size: 0.85rem;
     }
+
+    /* Strict Mobile-First Column Width Distributions */
+    th:nth-child(1), td:nth-child(1) { width: 9%; text-align: center; } /* S.No */
+    th:nth-child(2), td:nth-child(2) { width: 33%; } /* Product Name */
+    th:nth-child(3), td:nth-child(3) { width: 13%; text-align: center; } /* Unit */
+    th:nth-child(4), td:nth-child(4) { display: none; } /* Actual Price (Hidden on Mobile) */
+    th:nth-child(5), td:nth-child(5) { width: 19%; text-align: right; } /* Disc Price */
+    th:nth-child(6), td:nth-child(6) { width: 26%; text-align: center; } /* Qty Controls */
+    th:nth-child(7), td:nth-child(7) { display: none; } /* Subtotal (Hidden on Mobile to fit viewport safely) */
 
     th {
       background-color: #212529;
       color: white;
       font-weight: 600;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      font-size: 0.8rem;
     }
 
     .category-header {
       background-color: #e9ecef;
       font-weight: bold;
       color: #1d3557;
-      font-size: 1.05rem;
-    }
-
-    .actual-price {
-      text-decoration: line-through;
-      color: #8d99ae;
-      font-size: 0.85rem;
+      font-size: 0.95rem;
     }
 
     .discount-price {
@@ -146,29 +139,62 @@
     .qty-control {
       display: flex;
       align-items: center;
-      gap: 4px;
+      justify-content: center;
+      gap: 1px;
     }
 
     .btn-qty {
       background-color: #e9ecef;
       border: 1px solid var(--border-color);
-      width: 32px;
-      height: 32px;
-      border-radius: 4px;
+      width: 22px;
+      height: 24px;
+      border-radius: 3px;
       font-weight: bold;
       cursor: pointer;
+      font-size: 0.85rem;
       -webkit-tap-highlight-color: transparent;
     }
 
     .qty-input {
-      width: 50px;
-      height: 32px;
-      padding: 4px;
+      width: 30px;
+      height: 24px;
+      padding: 1px;
       border: 1px solid var(--border-color);
-      border-radius: 4px;
+      border-radius: 3px;
       text-align: center;
-      font-size: 0.95rem;
+      font-size: 0.8rem;
       -webkit-appearance: none;
+    }
+
+    /* Desktop Viewport adjustments (Screens wider than 768px) */
+    @media (min-width: 769px) {
+      th:nth-child(1), td:nth-child(1) { width: 6%; display: table-cell; }
+      th:nth-child(2), td:nth-child(2) { width: 30%; display: table-cell; }
+      th:nth-child(3), td:nth-child(3) { width: 10%; display: table-cell; }
+      th:nth-child(4), td:nth-child(4) { width: 14%; display: table-cell; text-align: right; }
+      th:nth-child(5), td:nth-child(5) { width: 14%; display: table-cell; text-align: right; }
+      th:nth-child(6), td:nth-child(6) { width: 14%; display: table-cell; }
+      th:nth-child(7), td:nth-child(7) { width: 16%; display: table-cell; text-align: right; }
+      
+      th, td {
+        padding: 12px 14px;
+        font-size: 1rem;
+      }
+      .btn-qty {
+        width: 32px;
+        height: 32px;
+      }
+      .qty-input {
+        width: 50px;
+        height: 32px;
+        font-size: 0.95rem;
+      }
+    }
+
+    .actual-price {
+      text-decoration: line-through;
+      color: #8d99ae;
+      font-size: 0.85rem;
     }
 
     .subtotal {
@@ -238,9 +264,6 @@
     }
 
     @media (max-width: 768px) {
-      .scroll-hint {
-        display: block; /* Show mobile swipe hint */
-      }
       .cart-bar {
         flex-direction: column;
         gap: 0.8rem;
@@ -277,8 +300,6 @@
 
   <div class="container">
     <input type="text" id="searchInput" class="search-box" placeholder="Search products..." onkeyup="filterProducts()" />
-    
-    <div class="scroll-hint">Swipe horizontally to view prices and quantities &rarr;</div>
 
     <div class="table-container">
       <table id="priceTable">
@@ -287,8 +308,8 @@
             <th>S.No</th>
             <th>Product Name</th>
             <th>Unit</th>
-            <th>Actual Price</th>
-            <th>80% Disc. Price</th>
+            <th>Actual</th>
+            <th>Disc. Price</th>
             <th>Quantity</th>
             <th>Subtotal</th>
           </tr>
@@ -617,7 +638,8 @@
       const selectedItems = [];
       let grandTotal = 0;
       let totalActual = 0;
-      let orderText = "Hello Cosmic Crackers, I would like to place an order:\n\n";
+
+      let orderText = "Hello Cosmic Crackers, I have placed an order and generated my bill PDF.\n\nOrder Summary:\n";
 
       rawData.forEach(item => {
         if (item.id && quantities[item.id] > 0) {
@@ -646,9 +668,14 @@
         return;
       }
 
-      orderText += `\n*Grand Total: ₹${grandTotal.toFixed(2)}*`;
+      const totalSavings = totalActual - grandTotal;
 
-      // Generate & Automatically Download PDF
+      orderText += `\nTotal Amount: ₹${totalActual.toFixed(2)}`;
+      orderText += `\nTotal Savings: ₹${totalSavings.toFixed(2)}`;
+      orderText += `\nGrand Total: ₹${grandTotal.toFixed(2)}`;
+      orderText += `\n\n(PDF Bill downloaded and attached)`;
+
+      // Generate & Download PDF using jsPDF
       const { jsPDF } = window.jspdf;
       if (jsPDF) {
         const doc = new jsPDF();
@@ -667,14 +694,14 @@
         doc.text("Sivakasi Wholesale Price List - Estimate Invoice", 105, 22, { align: "center" });
         doc.text("Call / WhatsApp: +91 8667784874", 105, 28, { align: "center" });
 
-        // Invoice Details
+        // Invoice Metadata
         doc.setTextColor(0, 0, 0);
         doc.setFontSize(9);
         doc.setFont("helvetica", "normal");
         doc.text(`Date: ${new Date().toLocaleDateString()}`, 14, 42);
         doc.text("Status: Order Invoice", 150, 42);
 
-        // AutoTable
+        // Table generation
         if (typeof doc.autoTable === "function") {
           doc.autoTable({
             startY: 48,
@@ -687,13 +714,12 @@
         }
 
         const finalY = (doc.lastAutoTable && doc.lastAutoTable.finalY) ? doc.lastAutoTable.finalY : 50;
-        const totalSavings = totalActual - grandTotal;
 
-        // Totals Section
+        // Totals Section matching WhatsApp receipt structure
         doc.setFont("helvetica", "normal");
         doc.setFontSize(9);
         doc.setTextColor(0, 0, 0);
-        doc.text(`Original Total: Rs. ${totalActual.toFixed(2)}`, 14, finalY + 10);
+        doc.text(`Total Amount: Rs. ${totalActual.toFixed(2)}`, 14, finalY + 10);
         doc.text(`Total Savings: Rs. ${totalSavings.toFixed(2)}`, 14, finalY + 16);
 
         doc.setFont("helvetica", "bold");
@@ -709,7 +735,7 @@
         doc.save("Cosmic_Crackers_Invoice.pdf");
       }
 
-      // Open WhatsApp with order details
+      // Open WhatsApp with precise layout message
       const encodedText = encodeURIComponent(orderText);
       setTimeout(() => {
         window.open(`https://wa.me/918667784874?text=${encodedText}`, '_blank');
