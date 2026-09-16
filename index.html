@@ -226,54 +226,36 @@
     }
 
     /* Hidden Invoice Template for PDF Generation */
-    #invoice-template {
-      display: none;
-      padding: 20px;
-      background: #fff;
-      color: #000;
-      font-family: Arial, sans-serif;
-    }
-
-    #invoice-template h2 {
-      text-align: center;
-      color: #d90429;
-      margin-bottom: 5px;
-    }
-
-    #invoice-template p {
-      text-align: center;
-      font-size: 0.9rem;
-      margin-bottom: 15px;
-    }
-
-    #invoice-template table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 15px;
-    }
-
-    #invoice-template th, #invoice-template td {
-      border: 1px solid #ccc;
-      padding: 6px 8px;
-      font-size: 0.85rem;
-    }
-
-    #invoice-template th {
-      background-color: #f1f1f1;
-    }
-
-    .invoice-footer {
-      text-align: center;
-      margin-top: 25px;
-      padding-top: 15px;
-      border-top: 2px dashed #d90429;
-    }
-
-    .invoice-footer h3 {
-      color: #1d3557;
-      font-size: 1.2rem;
-    }
-
+    <!-- Hidden Container for PDF Bill -->
+  <div id="invoice-template">
+    <h2>COSMIC CRACKERS</h2>
+    <p>Sivakasi Wholesale Crackers | Contact: 8667784874</p>
+    <hr style="margin-bottom: 15px;" />
+    <table>
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>Product Name</th>
+          <th>Unit</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody id="invoiceTableBody">
+        <!-- Dynamically injected -->
+      </tbody>
+    </table>
+    <div style="text-align: right; margin-bottom: 15px; font-size: 0.95rem; line-height: 1.6;">
+      <p><strong>Total Amount: <span id="pdfTotalAmount">₹0.00</span></strong></p>
+      <p><strong>Total Savings: <span id="pdfSavings">₹0.00</span></strong></p>
+      <p style="font-size: 1.1rem; color: #d90429;"><strong>Grand Total: <span id="pdfGrandTotal">₹0.00</span></strong></p>
+    </div>
+    <div class="invoice-footer">
+      <h3>Thank you & Happy Diwali! 🪔✨</h3>
+      <p style="margin-top: 5px; font-size: 0.85rem; color: #555;">Cosmic Crackers - Light Up Your Celebrations</p>
+    </div>
+  </div>
     /* Desktop View Adjustments */
     @media (min-width: 769px) {
       table {
@@ -660,7 +642,7 @@
       });
     }
 
-    async function processOrderAndPDF() {
+   async function processOrderAndPDF() {
       let hasItems = false;
       let grandTotal = 0;
       let totalActual = 0;
@@ -697,14 +679,17 @@
       }
 
       const totalSavings = totalActual - grandTotal;
-      orderText += `\n*Grand Total: ₹${grandTotal.toFixed(2)}*\n\n*(PDF Bill has been downloaded to my device and attached here)*`;
+      orderText += `\n*Total Amount: ₹${totalActual.toFixed(2)}*`;
+      orderText += `\n*Total Savings: ₹${totalSavings.toFixed(2)}*`;
+      orderText += `\n*Grand Total: ₹${grandTotal.toFixed(2)}*\n\n*(PDF Bill downloaded and attached)*`;
 
-      // Populate hidden PDF template
+      // Populate hidden PDF template values
       document.getElementById('invoiceTableBody').innerHTML = pdfTableHTML;
+      document.getElementById('pdfTotalAmount').innerText = `₹${totalActual.toFixed(2)}`;
       document.getElementById('pdfSavings').innerText = `₹${totalSavings.toFixed(2)}`;
       document.getElementById('pdfGrandTotal').innerText = `₹${grandTotal.toFixed(2)}`;
 
-      // Show element temporarily for rendering
+      // Render PDF
       const element = document.getElementById('invoice-template');
       element.style.display = 'block';
 
@@ -724,7 +709,7 @@
         element.style.display = 'none';
       }
 
-      // Redirect to WhatsApp with order pre-filled
+      // Open WhatsApp with complete details
       const encodedText = encodeURIComponent(orderText);
       window.open(`https://wa.me/918667784874?text=${encodedText}`, '_blank');
     }
