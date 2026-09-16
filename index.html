@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Cosmic Crackers - Online Store & Invoice Generator</title>
   <!-- html2pdf.js bundle CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -14,7 +14,11 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    body {
+    /* Prevent Horizontal Scrolling Across All Screens */
+    html, body {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
       background-color: #1a1a2e;
       color: #e0e0e0;
       padding-bottom: 90px;
@@ -22,38 +26,42 @@
 
     /* Header */
     header {
+      width: 100%;
       background: linear-gradient(135deg, #16213e, #0f3460);
       color: #e94560;
       text-align: center;
-      padding: 25px 15px;
+      padding: 20px 10px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.5);
       border-bottom: 3px solid #e94560;
     }
 
     header h1 {
-      font-size: 2.2rem;
-      letter-spacing: 2px;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
       text-shadow: 0 2px 4px rgba(0,0,0,0.6);
       margin-bottom: 5px;
+      word-wrap: break-word;
     }
 
     header p {
       color: #00fff5;
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
 
     /* Main Container */
     .container {
+      width: 100%;
       max-width: 900px;
-      margin: 20px auto;
-      padding: 0 15px;
+      margin: 15px auto;
+      padding: 0 10px;
     }
 
-    /* Table Styles */
+    /* Table Container & Wrapping */
     .table-container {
+      width: 100%;
       background-color: #16213e;
-      border-radius: 12px;
-      overflow-x: auto;
+      border-radius: 10px;
+      overflow-x: hidden;
       box-shadow: 0 8px 20px rgba(0,0,0,0.4);
     }
 
@@ -61,21 +69,23 @@
       width: 100%;
       border-collapse: collapse;
       text-align: left;
+      table-layout: fixed;
+    }
+
+    th, td {
+      padding: 10px 4px;
+      border-bottom: 1px solid #1a1a2e;
+      font-size: 0.85rem;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
 
     th {
       background-color: #0f3460;
       color: #00fff5;
-      padding: 14px 12px;
-      font-size: 0.95rem;
       text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    td {
-      padding: 12px;
-      border-bottom: 1px solid #1a1a2e;
-      font-size: 0.95rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
     }
 
     tr:hover {
@@ -90,8 +100,8 @@
     .actual-price {
       text-decoration: line-through;
       color: #888;
-      font-size: 0.85rem;
-      margin-right: 5px;
+      font-size: 0.75rem;
+      display: block;
     }
 
     .disc-price {
@@ -103,36 +113,41 @@
     .qty-control {
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      gap: 2px;
     }
 
     .btn-qty {
       background-color: #e94560;
       color: white;
       border: none;
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
-      font-size: 1.1rem;
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      font-size: 0.9rem;
       font-weight: bold;
       cursor: pointer;
-      transition: 0.2s ease;
-    }
-
-    .btn-qty:hover {
-      background-color: #ff6b81;
     }
 
     .qty-input {
-      width: 45px;
+      width: 30px;
       text-align: center;
       background: #0f3460;
       border: 1px solid #00fff5;
       color: #fff;
-      border-radius: 6px;
-      padding: 4px;
+      border-radius: 4px;
+      padding: 2px;
       font-weight: bold;
+      font-size: 0.8rem;
     }
+
+    /* Strict Mobile Table Width Allocation */
+    .col-sno { width: 7%; text-align: center; }
+    .col-name { width: 37%; }
+    .col-unit { width: 14%; text-align: center; }
+    .col-price { width: 16%; }
+    .col-qty { width: 14%; text-align: center; }
+    .col-total { width: 12%; text-align: right; }
 
     /* Bottom Floating Bar */
     .footer-bar {
@@ -141,7 +156,7 @@
       left: 0;
       width: 100%;
       background: #0f3460;
-      padding: 15px 25px;
+      padding: 12px 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -151,74 +166,68 @@
     }
 
     .total-box {
-      font-size: 1.2rem;
+      font-size: 0.95rem;
       font-weight: bold;
       color: #fff;
     }
 
     .total-box span {
       color: #00ff88;
-      font-size: 1.4rem;
+      font-size: 1.1rem;
     }
 
     .btn-order {
       background: linear-gradient(45deg, #00ff88, #00b894);
       color: #000;
       font-weight: bold;
-      font-size: 1.05rem;
-      padding: 12px 24px;
+      font-size: 0.85rem;
+      padding: 10px 14px;
       border: none;
-      border-radius: 30px;
+      border-radius: 25px;
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(0, 255, 136, 0.4);
-      transition: all 0.3s ease;
     }
 
-    .btn-order:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0, 255, 136, 0.6);
-    }
-
-    /* -------------------------------------------------------------
-       OFF-SCREEN INVOICE TEMPLATE FOR PDF GENERATION
-       (Positioned off-screen so html2canvas renders without blank pages)
-    ------------------------------------------------------------- */
+    /* Off-screen Printable PDF Template - Visible to DOM during capture to prevent blank output */
     #invoice-template-wrapper {
       position: absolute;
       top: 0;
-      left: -9999px;
-      width: 800px;
+      left: 0;
+      z-index: -9999;
+      opacity: 0;
+      pointer-events: none;
+      width: 750px;
     }
 
     #invoice-template {
       background-color: #ffffff;
       color: #222222;
-      padding: 30px;
+      padding: 25px;
       font-family: Arial, sans-serif;
     }
 
     .pdf-header {
       text-align: center;
       border-bottom: 2px solid #e94560;
-      padding-bottom: 15px;
-      margin-bottom: 20px;
+      padding-bottom: 12px;
+      margin-bottom: 15px;
     }
 
     .pdf-header h2 {
       color: #e94560;
-      font-size: 24px;
-      margin-bottom: 5px;
+      font-size: 22px;
+      margin-bottom: 4px;
     }
 
     .pdf-header p {
       color: #555;
-      font-size: 13px;
+      font-size: 12px;
     }
 
     .pdf-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     .pdf-table th {
@@ -240,28 +249,28 @@
     .pdf-summary {
       float: right;
       width: 250px;
-      margin-top: 10px;
+      margin-top: 5px;
     }
 
     .pdf-summary-line {
       display: flex;
       justify-content: space-between;
-      padding: 4px 0;
-      font-size: 13px;
+      padding: 3px 0;
+      font-size: 12px;
     }
 
     .pdf-summary-line.grand {
       font-weight: bold;
-      font-size: 15px;
+      font-size: 14px;
       border-top: 2px solid #333;
-      padding-top: 8px;
+      padding-top: 6px;
       margin-top: 4px;
       color: #d63031;
     }
 
     .pdf-footer {
       clear: both;
-      padding-top: 30px;
+      padding-top: 25px;
       text-align: center;
       font-size: 11px;
       color: #777;
@@ -272,7 +281,7 @@
 
   <header>
     <h1>COSMIC CRACKERS</h1>
-    <p>Diwali Special Price List & Automated Order Billing</p>
+    <p>Diwali Price List & Automatic Bill Generator</p>
   </header>
 
   <div class="container">
@@ -280,12 +289,12 @@
       <table>
         <thead>
           <tr>
-            <th>#</th>
-            <th>Item Name</th>
-            <th>Unit</th>
-            <th>Price</th>
-            <th>Qty</th>
-            <th style="text-align: right;">Total</th>
+            <th class="col-sno">#</th>
+            <th class="col-name">Item Name</th>
+            <th class="col-unit">Unit</th>
+            <th class="col-price">Price</th>
+            <th class="col-qty">Qty</th>
+            <th class="col-total">Total</th>
           </tr>
         </thead>
         <tbody id="productTableBody">
@@ -295,15 +304,15 @@
     </div>
   </div>
 
-  <!-- Bottom Bar -->
+  <!-- Bottom Floating Bar -->
   <div class="footer-bar">
     <div class="total-box">
-      Grand Total: <span id="grandTotalText">₹0.00</span>
+      Total: <span id="grandTotalText">₹0.00</span>
     </div>
-    <button class="btn-order" onclick="processOrderAndPDF()">Generate & Share PDF Order</button>
+    <button class="btn-order" onclick="processOrderAndPDF()">Generate & Share Order</button>
   </div>
 
-  <!-- Off-Screen Printable PDF Container -->
+  <!-- Off-Screen Printable PDF Wrapper -->
   <div id="invoice-template-wrapper">
     <div id="invoice-template">
       <div class="pdf-header">
@@ -315,11 +324,11 @@
       <table class="pdf-table">
         <thead>
           <tr>
-            <th style="width: 5%;">S.No</th>
-            <th style="width: 45%;">Item Name</th>
-            <th style="width: 15%;">Unit</th>
-            <th style="width: 12%; text-align: right;">Price</th>
-            <th style="width: 8%; text-align: center;">Qty</th>
+            <th style="width: 8%; text-align: center;">S.No</th>
+            <th style="width: 42%;">Item Name</th>
+            <th style="width: 12%; text-align: center;">Unit</th>
+            <th style="width: 13%; text-align: right;">Price</th>
+            <th style="width: 10%; text-align: center;">Qty</th>
             <th style="width: 15%; text-align: right;">Subtotal</th>
           </tr>
         </thead>
@@ -330,11 +339,11 @@
 
       <div class="pdf-summary">
         <div class="pdf-summary-line">
-          <span>Total Market Price:</span>
+          <span>Total Original Price:</span>
           <span id="pdfTotalAmount">₹0.00</span>
         </div>
         <div class="pdf-summary-line">
-          <span>Diwali Discount Savings:</span>
+          <span>Diwali Savings:</span>
           <span id="pdfSavings" style="color: green;">₹0.00</span>
         </div>
         <div class="pdf-summary-line grand">
@@ -344,34 +353,32 @@
       </div>
 
       <div class="pdf-footer">
-        <p>Thank you for choosing Cosmic Crackers! Wish you a Happy & Safe Diwali!</p>
-        <p>For queries, contact support at +91 9876543210</p>
+        <p>Thank you for ordering from Cosmic Crackers!</p>
+        <p>Contact / WhatsApp Support: +91 8667784874</p>
       </div>
     </div>
   </div>
 
   <script>
-    // Configuration
+    // Configuration Target Mobile Number
     const CONFIG = {
-      whatsappNumber: "919876543210" // Replace with your target WhatsApp number
+      whatsappNumber: "918667784874"
     };
 
-    // Crackers Product Catalog
+    // Catalog Data
     const rawData = [
-      { id: 101, name: "Red Bijili (100 Sound Packet)", unit: "1 Pkt", actual: 50, disc: 16 },
-      { id: 102, name: "Striking Red Fountain", unit: "1 Box", actual: 80, disc: 22 },
-      { id: 103, name: "Hydro Bomb Supreme", unit: "1 Box", actual: 120, disc: 36 },
-      { id: 104, name: "Fancy Peacock Flower Pot", unit: "1 Box", actual: 150, disc: 39 },
-      { id: 105, name: "10cm Sparklers (Electric Green)", unit: "1 Box", actual: 40, disc: 11 },
-      { id: 106, name: "12 Shot Multi-Color Sky Shot", unit: "1 Box", actual: 250, disc: 85 },
-      { id: 107, name: "Ground Chakar Extraordinary", unit: "1 Box", actual: 110, disc: 39 },
-      { id: 108, name: "1000 Wala Deluxe Crackers", unit: "1 Box", actual: 850, disc: 290 }
+      { id: 101, name: '4" Deluxe Lakshmi', unit: "1 Pkt", actual: 180, disc: 36 },
+      { id: 102, name: '2¾" Kuruvi Crackers', unit: "1 Pkt", actual: 55, disc: 11 },
+      { id: 103, name: "Red Bijili (100 Sound)", unit: "1 Pkt", actual: 50, disc: 16 },
+      { id: 104, name: "Striking Red Fountain", unit: "1 Box", actual: 80, disc: 22 },
+      { id: 105, name: "Hydro Bomb Supreme", unit: "1 Box", actual: 120, disc: 36 },
+      { id: 106, name: "Fancy Peacock Flower Pot", unit: "1 Box", actual: 150, disc: 39 },
+      { id: 107, name: "Electric Green Sparklers", unit: "1 Box", actual: 40, disc: 11 },
+      { id: 108, name: "12 Shot Sky Shot", unit: "1 Box", actual: 250, disc: 85 }
     ];
 
-    // Quantity Store
     const quantities = {};
 
-    // Initialize Page Table
     function renderProducts() {
       const tbody = document.getElementById('productTableBody');
       tbody.innerHTML = '';
@@ -381,22 +388,22 @@
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>${idx + 1}</td>
-          <td class="item-name">${item.name}</td>
-          <td>${item.unit}</td>
-          <td>
+          <td class="col-sno">${idx + 1}</td>
+          <td class="col-name item-name">${item.name}</td>
+          <td class="col-unit">${item.unit}</td>
+          <td class="col-price">
             <span class="actual-price">₹${item.actual}</span>
             <span class="disc-price">₹${item.disc}</span>
           </td>
-          <td>
+          <td class="col-qty">
             <div class="qty-control">
               <button class="btn-qty" onclick="updateQty(${item.id}, -1)">-</button>
               <input type="text" class="qty-input" id="input-${item.id}" value="${quantities[item.id]}" readonly>
               <button class="btn-qty" onclick="updateQty(${item.id}, 1)">+</button>
             </div>
           </td>
-          <td style="text-align: right; font-weight: bold; color: #00fff5;" id="subtotal-${item.id}">
-            ₹0.00
+          <td class="col-total" style="font-weight: bold; color: #00fff5;" id="subtotal-${item.id}">
+            ₹0
           </td>
         `;
         tbody.appendChild(tr);
@@ -405,7 +412,6 @@
       calculateTotals();
     }
 
-    // Update Quantity
     function updateQty(id, change) {
       const current = quantities[id] || 0;
       const updated = Math.max(0, current + change);
@@ -415,7 +421,6 @@
       calculateTotals();
     }
 
-    // Recalculate Totals
     function calculateTotals() {
       let grandTotal = 0;
 
@@ -426,21 +431,20 @@
 
         const subtotalEl = document.getElementById(`subtotal-${item.id}`);
         if (subtotalEl) {
-          subtotalEl.innerText = `₹${subtotal.toFixed(2)}`;
+          subtotalEl.innerText = `₹${subtotal}`;
         }
       });
 
       document.getElementById('grandTotalText').innerText = `₹${grandTotal.toFixed(2)}`;
     }
 
-    // Generate PDF & Share via WhatsApp
     async function processOrderAndPDF() {
       let hasItems = false;
       let grandTotal = 0;
       let totalActual = 0;
       let pdfTableHTML = "";
 
-      let orderText = "Hello Cosmic Crackers, I have placed an order and generated my bill PDF.\n\n*Order Details:*\n";
+      let orderText = "Hello Cosmic Crackers, I have placed an order.\n\n*Order Summary:*\n";
 
       let count = 1;
       rawData.forEach(item => {
@@ -478,9 +482,8 @@
       orderText += `\n*Total Market Price: ₹${totalActual.toFixed(2)}*`;
       orderText += `\n*Total Savings: ₹${totalSavings.toFixed(2)}*`;
       orderText += `\n*Grand Total: ₹${grandTotal.toFixed(2)}*\n\n`;
-      orderText += `(Invoice Bill downloaded to my device)`;
+      orderText += `📌 *Note:* My detailed PDF Bill has been saved to my Downloads. I will attach it below.`;
 
-      // Inject values into off-screen PDF layout
       document.getElementById('invoiceTableBody').innerHTML = pdfTableHTML;
       document.getElementById('pdfTotalAmount').innerText = `₹${totalActual.toFixed(2)}`;
       document.getElementById('pdfSavings').innerText = `₹${totalSavings.toFixed(2)}`;
@@ -490,30 +493,26 @@
 
       const element = document.getElementById('invoice-template');
 
+      // html2pdf options explicitly configured to eliminate blank white renders
       const opt = {
         margin:       0.3,
         filename:     `Cosmic_Crackers_Invoice_${invoiceId}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, logging: false },
+        html2canvas:  { scale: 2, useCORS: true, logging: false, scrollX: 0, scrollY: 0 },
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
 
       try {
-        // 1. Direct PDF Generation & Download
         await html2pdf().set(opt).from(element).save();
-
-        // 2. Open WhatsApp Web directly with summary message
         const encodedText = encodeURIComponent(orderText);
         window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodedText}`, '_blank');
       } catch (err) {
         console.error("PDF Export Error: ", err);
-        alert("Could not render PDF. Opening WhatsApp with order summary.");
         const encodedText = encodeURIComponent(orderText);
         window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodedText}`, '_blank');
       }
     }
 
-    // Initialize on page load
     window.onload = renderProducts;
   </script>
 </body>
