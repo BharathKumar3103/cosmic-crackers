@@ -688,11 +688,11 @@
       };
 
       try {
-        // 1. Download PDF to customer device
+        // 1. Force PDF file download directly to the system
         const pdfWorker = html2pdf().set(opt).from(element);
         await pdfWorker.save();
 
-        // 2. Open WhatsApp with formatted order message
+        // 2. Open WhatsApp Web / App directly in a new tab
         const encodedText = encodeURIComponent(orderText);
         window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodedText}`, '_blank');
       } catch (e) {
