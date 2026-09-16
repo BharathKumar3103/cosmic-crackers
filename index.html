@@ -29,53 +29,53 @@
     body {
       background-color: var(--bg-color);
       color: var(--text-color);
-      padding-bottom: 140px;
-      overflow-x: hidden; /* Strictly prevents horizontal body scrolling */
+      padding-bottom: 150px;
+      overflow-x: hidden;
     }
 
     header {
       background: linear-gradient(135deg, #1d3557, #457b9d);
       color: white;
       text-align: center;
-      padding: 2rem 1rem;
+      padding: 1.5rem 1rem;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
     header h1 {
-      font-size: 2.2rem;
+      font-size: 1.8rem;
       color: var(--accent-color);
       letter-spacing: 1px;
     }
 
     header p {
-      margin-top: 0.5rem;
-      font-size: 1rem;
+      margin-top: 0.3rem;
+      font-size: 0.9rem;
     }
 
     .badge {
       display: inline-block;
       background-color: var(--primary-color);
       color: white;
-      padding: 0.3rem 0.8rem;
+      padding: 0.2rem 0.6rem;
       border-radius: 20px;
       font-weight: bold;
-      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      margin-top: 0.4rem;
     }
 
     .container {
-      max-width: 1200px;
-      margin: 1.5rem auto;
-      padding: 0 1rem;
-      width: 100%;
+      max-width: 100%;
+      margin: 0.8rem auto;
+      padding: 0 8px;
     }
 
     .search-box {
       width: 100%;
-      padding: 0.8rem 1.2rem;
-      font-size: 1rem;
+      padding: 0.7rem 1rem;
+      font-size: 0.95rem;
       border: 2px solid var(--border-color);
       border-radius: 8px;
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
       outline: none;
       -webkit-appearance: none;
     }
@@ -88,47 +88,48 @@
       width: 100%;
       background: white;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      margin-bottom: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
       border: 1px solid var(--border-color);
-      overflow-x: hidden; /* Prevents container scroll */
+      overflow: hidden;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      table-layout: fixed; /* Forces table to obey strict container sizing */
+      table-layout: fixed;
     }
 
     th, td {
-      padding: 10px 6px;
+      padding: 8px 4px;
       border-bottom: 1px solid var(--border-color);
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-      font-size: 0.85rem;
+      overflow: hidden;
+      word-break: break-word;
+      font-size: 0.75rem;
+      vertical-align: middle;
     }
 
-    /* Strict Mobile-First Column Width Distributions */
-    th:nth-child(1), td:nth-child(1) { width: 9%; text-align: center; } /* S.No */
-    th:nth-child(2), td:nth-child(2) { width: 33%; } /* Product Name */
-    th:nth-child(3), td:nth-child(3) { width: 13%; text-align: center; } /* Unit */
-    th:nth-child(4), td:nth-child(4) { display: none; } /* Actual Price (Hidden on Mobile) */
+    /* Column Widths optimized to fit 100% inside mobile screens without horizontal scroll */
+    th:nth-child(1), td:nth-child(1) { width: 8%; text-align: center; } /* S.No */
+    th:nth-child(2), td:nth-child(2) { width: 34%; } /* Product Name */
+    th:nth-child(3), td:nth-child(3) { display: none; } /* Unit (Hidden to save strict screen room) */
+    th:nth-child(4), td:nth-child(4) { display: none; } /* Actual Price (Hidden) */
     th:nth-child(5), td:nth-child(5) { width: 19%; text-align: right; } /* Disc Price */
-    th:nth-child(6), td:nth-child(6) { width: 26%; text-align: center; } /* Qty Controls */
-    th:nth-child(7), td:nth-child(7) { display: none; } /* Subtotal (Hidden on Mobile to fit viewport safely) */
+    th:nth-child(6), td:nth-child(6) { width: 22%; text-align: center; } /* Qty Controls */
+    th:nth-child(7), td:nth-child(7) { width: 17%; text-align: right; } /* Subtotal */
 
     th {
       background-color: #212529;
       color: white;
       font-weight: 600;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
     }
 
     .category-header {
       background-color: #e9ecef;
       font-weight: bold;
       color: #1d3557;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
+      padding: 6px 8px;
     }
 
     .discount-price {
@@ -146,60 +147,45 @@
     .btn-qty {
       background-color: #e9ecef;
       border: 1px solid var(--border-color);
-      width: 22px;
-      height: 24px;
-      border-radius: 3px;
+      width: 18px;
+      height: 22px;
+      border-radius: 2px;
       font-weight: bold;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       -webkit-tap-highlight-color: transparent;
     }
 
     .qty-input {
-      width: 30px;
-      height: 24px;
-      padding: 1px;
+      width: 24px;
+      height: 22px;
+      padding: 0;
       border: 1px solid var(--border-color);
-      border-radius: 3px;
+      border-radius: 2px;
       text-align: center;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       -webkit-appearance: none;
-    }
-
-    /* Desktop Viewport adjustments (Screens wider than 768px) */
-    @media (min-width: 769px) {
-      th:nth-child(1), td:nth-child(1) { width: 6%; display: table-cell; }
-      th:nth-child(2), td:nth-child(2) { width: 30%; display: table-cell; }
-      th:nth-child(3), td:nth-child(3) { width: 10%; display: table-cell; }
-      th:nth-child(4), td:nth-child(4) { width: 14%; display: table-cell; text-align: right; }
-      th:nth-child(5), td:nth-child(5) { width: 14%; display: table-cell; text-align: right; }
-      th:nth-child(6), td:nth-child(6) { width: 14%; display: table-cell; }
-      th:nth-child(7), td:nth-child(7) { width: 16%; display: table-cell; text-align: right; }
-      
-      th, td {
-        padding: 12px 14px;
-        font-size: 1rem;
-      }
-      .btn-qty {
-        width: 32px;
-        height: 32px;
-      }
-      .qty-input {
-        width: 50px;
-        height: 32px;
-        font-size: 0.95rem;
-      }
-    }
-
-    .actual-price {
-      text-decoration: line-through;
-      color: #8d99ae;
-      font-size: 0.85rem;
     }
 
     .subtotal {
       font-weight: bold;
       color: #2b2d42;
+    }
+
+    /* Desktop Viewport adjustments */
+    @media (min-width: 769px) {
+      .container { max-width: 1100px; padding: 0 1rem; }
+      header h1 { font-size: 2.2rem; }
+      th, td { padding: 12px 10px; font-size: 0.95rem; }
+      th:nth-child(1), td:nth-child(1) { width: 6%; display: table-cell; }
+      th:nth-child(2), td:nth-child(2) { width: 28%; display: table-cell; }
+      th:nth-child(3), td:nth-child(3) { width: 10%; display: table-cell; text-align: center; }
+      th:nth-child(4), td:nth-child(4) { width: 14%; display: table-cell; text-align: right; text-decoration: line-through; color: #8d99ae; }
+      th:nth-child(5), td:nth-child(5) { width: 14%; display: table-cell; text-align: right; }
+      th:nth-child(6), td:nth-child(6) { width: 14%; display: table-cell; }
+      th:nth-child(7), td:nth-child(7) { width: 14%; display: table-cell; text-align: right; }
+      .btn-qty { width: 30px; height: 30px; font-size: 0.9rem; }
+      .qty-input { width: 42px; height: 30px; font-size: 0.9rem; }
     }
 
     /* Fixed Footer Navigation */
@@ -210,50 +196,50 @@
       right: 0;
       background-color: #212529;
       color: white;
-      padding: 1rem 1.5rem;
+      padding: 0.7rem 1rem;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      gap: 0.6rem;
       box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
       z-index: 1000;
     }
 
     .cart-info {
       display: flex;
-      gap: 1.5rem;
+      justify-content: space-between;
       align-items: center;
+      width: 100%;
     }
 
     .cart-info div {
       display: flex;
       flex-direction: column;
+      align-items: center;
     }
 
     .cart-info span.label {
-      font-size: 0.75rem;
+      font-size: 0.65rem;
       color: #adb5bd;
+      text-transform: uppercase;
     }
 
     .cart-info span.value {
-      font-size: 1.1rem;
+      font-size: 0.85rem;
       font-weight: bold;
       color: var(--accent-color);
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 8px;
     }
 
     .btn-order {
       background-color: #25d366;
       color: white;
       border: none;
-      padding: 0.9rem 1.8rem;
-      font-size: 1.05rem;
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
       font-weight: bold;
       border-radius: 6px;
       cursor: pointer;
+      text-align: center;
       text-decoration: none;
       -webkit-tap-highlight-color: transparent;
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
@@ -263,28 +249,25 @@
       background-color: #20ba5a;
     }
 
-    @media (max-width: 768px) {
+    @media (min-width: 769px) {
       .cart-bar {
-        flex-direction: column;
-        gap: 0.8rem;
-        padding: 0.8rem 1rem;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 1rem 2rem;
       }
       .cart-info {
-        gap: 0.5rem;
-        width: 100%;
-        justify-content: space-between;
+        width: auto;
+        gap: 2rem;
+      }
+      .cart-info div {
+        align-items: flex-start;
       }
       .cart-info span.value {
-        font-size: 0.95rem;
-      }
-      .action-buttons {
-        width: 100%;
+        font-size: 1.1rem;
       }
       .btn-order {
-        flex: 1;
-        text-align: center;
-        padding: 0.8rem;
-        font-size: 0.95rem;
+        width: auto;
+        padding: 0.8rem 2rem;
       }
     }
   </style>
@@ -295,7 +278,7 @@
     <h1>COSMIC CRACKERS</h1>
     <p>Sivakasi Wholesale Price List 2026</p>
     <div class="badge">FLAT 80% DISCOUNT APPLIED</div>
-    <p style="margin-top: 10px; font-size: 0.85rem;">Call / WhatsApp: 8667784874</p>
+    <p style="margin-top: 6px; font-size: 0.75rem;">Call / WhatsApp: 8667784874</p>
   </header>
 
   <div class="container">
@@ -310,7 +293,7 @@
             <th>Unit</th>
             <th>Actual</th>
             <th>Disc. Price</th>
-            <th>Quantity</th>
+            <th>Qty</th>
             <th>Subtotal</th>
           </tr>
         </thead>
@@ -340,9 +323,7 @@
         <span class="value" id="grandTotal">₹0.00</span>
       </div>
     </div>
-    <div class="action-buttons">
-      <button class="btn-order" onclick="generatePDFAndOrderWhatsApp()">Order WhatsApp</button>
-    </div>
+    <button class="btn-order" onclick="generatePDFAndOrderWhatsApp()">Order WhatsApp</button>
   </div>
 
   <script>
@@ -550,9 +531,9 @@
           row.setAttribute('data-name', item.name.toLowerCase());
           row.innerHTML = `
             <td>${item.id}</td>
-            <td>${item.name}</td>
+            <td>${item.name} (${item.unit})</td>
             <td>${item.unit}</td>
-            <td class="actual-price">₹${item.actual.toFixed(2)}</td>
+            <td>₹${item.actual.toFixed(2)}</td>
             <td class="discount-price">₹${item.disc.toFixed(2)}</td>
             <td>
               <div class="qty-control">
