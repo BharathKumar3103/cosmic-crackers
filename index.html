@@ -295,7 +295,7 @@
   </div>
 
   <!-- PDF Template Container (Hidden by default, shown temporarily during generation) -->
-  <div id="invoice-template" style="display: none; width: 750px; background: #ffffff; color: #000000; padding: 25px; font-family: Arial, sans-serif;">
+  <div id="invoice-template" style="display: none; width: 600px; background: #ffffff; color: #000000; padding: 25px; font-family: Arial, sans-serif;">
     <h2 id="pdfHeaderTitle" style="text-align: center; color: #d90429; margin-bottom: 5px;">COSMIC CRACKERS</h2>
     <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px;">Sivakasi Wholesale Crackers | Contact: <span id="pdfHeaderPhone">8667784874</span></p>
     <hr style="margin-bottom: 15px; border: 0; border-top: 1px solid #ccc;" />
@@ -683,7 +683,7 @@
         margin:       0.3,
         filename:     `Cosmic_Crackers_Bill_${Date.now()}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, logging: false, windowWidth: 750 },
+        html2canvas:  { scale: 2, useCORS: true, logging: false },
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
 
