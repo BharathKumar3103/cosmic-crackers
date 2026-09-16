@@ -294,8 +294,8 @@
     <button class="btn-order" onclick="processOrderAndPDF()">Download PDF & Send Order</button>
   </div>
 
-  <!-- Off-Screen PDF Template Container -->
-  <div id="invoice-template" style="position: absolute; left: -9999px; top: 0; width: 750px; background: #ffffff; color: #000000; padding: 25px; font-family: Arial, sans-serif;">
+  <!-- Fixed Off-Screen PDF Template Container (Mobile-Friendly) -->
+  <div id="invoice-template" style="position: fixed; top: 0; left: 0; width: 750px; background: #ffffff; color: #000000; padding: 25px; font-family: Arial, sans-serif; visibility: hidden; z-index: -1000;">
     <h2 id="pdfHeaderTitle" style="text-align: center; color: #d90429; margin-bottom: 5px;">COSMIC CRACKERS</h2>
     <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px;">Sivakasi Wholesale Crackers | Contact: <span id="pdfHeaderPhone">8667784874</span></p>
     <hr style="margin-bottom: 15px; border: 0; border-top: 1px solid #ccc;" />
@@ -654,7 +654,6 @@
             </tr>
           `;
 
-          // Format each line item with WhatsApp bullet format
           orderText += `• ${item.name} (${item.unit}) x ${q} = ₹${subtotal.toFixed(2)}\n`;
         }
       });
@@ -683,14 +682,16 @@
         margin:       0.3,
         filename:     `Cosmic_Crackers_Bill_${Date.now()}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, logging: false },
+        html2canvas:  { scale: 2, useCORS: true, logging: false, windowWidth: 750 },
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
 
       try {
+        // Small delay to ensure mobile layout engines register the DOM text injection
+        await new Promise(resolve => setTimeout(resolve, 150));
+
         // 1. Download PDF to customer device
-        const pdfWorker = html2pdf().set(opt).from(element);
-        await pdfWorker.save();
+        await html2pdf().set(opt).from(element).save();
 
         // 2. Open WhatsApp with formatted order message
         const encodedText = encodeURIComponent(orderText);
