@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cosmic Crackers - Diwali Price List 2026</title>
-  <style>
+<style>
     :root {
       --primary-color: #d90429;
       --secondary-color: #ef233c;
@@ -24,60 +24,55 @@
     body {
       background-color: var(--bg-color);
       color: var(--text-color);
-      padding-bottom: 100px;
+      padding-bottom: 120px;
     }
 
     header {
       background: linear-gradient(135deg, #1d3557, #457b9d);
       color: white;
       text-align: center;
-      padding: 2rem 1rem;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 1.5rem 0.8rem;
     }
 
     header h1 {
-      font-size: 2.5rem;
+      font-size: 1.8rem;
       color: var(--accent-color);
-      letter-spacing: 1px;
     }
 
     header p {
-      margin-top: 0.5rem;
-      font-size: 1.1rem;
+      margin-top: 0.3rem;
+      font-size: 0.95rem;
     }
 
     .badge {
       display: inline-block;
       background-color: var(--primary-color);
       color: white;
-      padding: 0.3rem 0.8rem;
+      padding: 0.25rem 0.6rem;
       border-radius: 20px;
+      font-size: 0.85rem;
       font-weight: bold;
-      margin-top: 0.5rem;
+      margin-top: 0.4rem;
     }
 
     .container {
       max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1rem;
+      margin: 1rem auto;
+      padding: 0 0.5rem;
     }
 
     .search-box {
       width: 100%;
-      padding: 0.8rem 1.2rem;
-      font-size: 1rem;
+      padding: 0.7rem;
+      font-size: 0.95rem;
       border: 2px solid var(--border-color);
       border-radius: 8px;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .search-box:focus {
-      border-color: var(--secondary-color);
     }
 
     .table-container {
+      width: 100%;
       overflow-x: auto;
       background: white;
       border-radius: 8px;
@@ -88,10 +83,11 @@
       width: 100%;
       border-collapse: collapse;
       text-align: left;
+      font-size: 0.85rem;
     }
 
     th, td {
-      padding: 12px 16px;
+      padding: 8px 6px;
       border-bottom: 1px solid var(--border-color);
     }
 
@@ -99,47 +95,49 @@
       background-color: #212529;
       color: white;
       font-weight: 600;
-      position: sticky;
-      top: 0;
+      font-size: 0.8rem;
+      white-space: nowrap;
     }
 
     .category-header {
       background-color: #e9ecef;
       font-weight: bold;
       color: #1d3557;
-      font-size: 1.1rem;
+      font-size: 0.95rem;
     }
 
-.actual-price {
-  color: #1d3557 !important;            /* Dark Blue Text */
-  text-decoration: line-through !important;
-  text-decoration-color: #d90429 !important; /* Bright Red Strikethrough */
-  text-decoration-thickness: 2px !important;
-  font-weight: 700;
-  font-size: 0.95rem;
-}
+    .actual-price {
+      color: #1d3557 !important;
+      text-decoration: line-through !important;
+      text-decoration-color: #d90429 !important;
+      text-decoration-thickness: 2px !important;
+      font-weight: 700;
+      font-size: 0.85rem;
+      white-space: nowrap;
     }
 
     .discount-price {
       color: var(--primary-color);
       font-weight: bold;
+      white-space: nowrap;
     }
 
     .qty-input {
-      width: 70px;
-      padding: 6px;
+      width: 50px;
+      padding: 4px;
       border: 1px solid var(--border-color);
       border-radius: 4px;
       text-align: center;
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
 
     .subtotal {
       font-weight: bold;
       color: #2b2d42;
+      white-space: nowrap;
     }
 
-    /* Sticky Cart Footer Bar */
+    /* Fixed Bottom Order Bar */
     .cart-bar {
       position: fixed;
       bottom: 0;
@@ -147,32 +145,34 @@
       right: 0;
       background-color: #212529;
       color: white;
-      padding: 1rem 2rem;
+      padding: 0.8rem 1rem;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      gap: 0.6rem;
       box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
       z-index: 1000;
     }
 
     .cart-info {
       display: flex;
-      gap: 2rem;
+      justify-content: space-between;
       align-items: center;
+      width: 100%;
     }
 
     .cart-info div {
       display: flex;
       flex-direction: column;
+      align-items: center;
     }
 
     .cart-info span.label {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: #adb5bd;
     }
 
     .cart-info span.value {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       font-weight: bold;
       color: var(--accent-color);
     }
@@ -181,33 +181,39 @@
       background-color: #25d366;
       color: white;
       border: none;
-      padding: 0.8rem 1.5rem;
+      padding: 0.7rem;
       font-size: 1rem;
       font-weight: bold;
       border-radius: 6px;
       cursor: pointer;
-      text-decoration: none;
-      transition: background-color 0.2s;
+      width: 100%;
+      text-align: center;
     }
 
-    .btn-order:hover {
-      background-color: #128c7e;
-    }
-
-    @media (max-width: 768px) {
+    /* Desktop Adjustments */
+    @media (min-width: 769px) {
+      table {
+        font-size: 1rem;
+      }
+      th, td {
+        padding: 12px 16px;
+      }
+      .qty-input {
+        width: 70px;
+        padding: 6px;
+      }
       .cart-bar {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 1rem 2rem;
       }
       .cart-info {
-        gap: 1rem;
-        width: 100%;
-        justify-content: space-between;
+        width: auto;
+        gap: 2rem;
       }
       .btn-order {
-        width: 100%;
-        text-align: center;
+        width: auto;
+        padding: 0.8rem 1.5rem;
       }
     }
   </style>
