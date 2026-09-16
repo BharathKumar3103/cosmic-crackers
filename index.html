@@ -291,7 +291,7 @@
         <span class="value" id="grandTotal">₹0.00</span>
       </div>
     </div>
-    <button class="btn-order" onclick="processOrderAndPDF()">Generate & Share PDF Order</button>
+    <button class="btn-order" onclick="processOrderAndPDF()">Download PDF & Send Order</button>
   </div>
 
   <!-- Off-Screen PDF Template Container -->
@@ -327,7 +327,7 @@
 
   <script>
     /* ==========================================================================
-       SECTION 1: STORE CONFIGURATION (EASY EDIT)
+       SECTION 1: STORE CONFIGURATION
        ========================================================================== */
     const CONFIG = {
       storeName: "COSMIC CRACKERS",
@@ -338,7 +338,7 @@
     };
 
     /* ==========================================================================
-       SECTION 2: PRODUCT DATA (EASY EDIT)
+       SECTION 2: PRODUCT DATA
        ========================================================================== */
     const rawData = [
       { category: "FLASH SOUND CRACKERS" },
@@ -630,6 +630,9 @@
       let grandTotal = 0;
       let totalActual = 0;
       let pdfTableHTML = "";
+      
+      // WhatsApp Formatted Text Message
+      let orderText = "Hello Cosmic Crackers, I have placed an order and generated my bill PDF.\n\n*Order Summary:*\n";
 
       let count = 1;
       rawData.forEach(item => {
@@ -650,6 +653,9 @@
               <td style="border: 1px solid #ccc; padding: 6px; text-align: right;">₹${subtotal.toFixed(2)}</td>
             </tr>
           `;
+
+          // Format each line item with WhatsApp bullet format
+          orderText += `• ${item.name} (${item.unit}) x ${q} = ₹${subtotal.toFixed(2)}\n`;
         }
       });
 
@@ -659,6 +665,11 @@
       }
 
       const totalSavings = totalActual - grandTotal;
+
+      orderText += `\n*Total Amount: ₹${totalActual.toFixed(2)}*`;
+      orderText += `\n*Total Savings: ₹${totalSavings.toFixed(2)}*`;
+      orderText += `\n*Grand Total: ₹${grandTotal.toFixed(2)}*\n\n`;
+      orderText += `(PDF Bill downloaded and attached)`;
 
       // Inject values into hidden PDF template
       document.getElementById('invoiceTableBody').innerHTML = pdfTableHTML;
@@ -670,35 +681,25 @@
 
       const opt = {
         margin:       0.3,
-        filename:     `Cosmic_Crackers_Bill.pdf`,
+        filename:     `Cosmic_Crackers_Bill_${Date.now()}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true, logging: false },
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
 
       try {
+        // 1. Download PDF to customer device
         const pdfWorker = html2pdf().set(opt).from(element);
-        const pdfBlob = await pdfWorker.output('blob');
-        const pdfFile = new File([pdfBlob], `${CONFIG.storeName.replace(/\s+/g, '_')}_Bill_${Date.now()}.pdf`, { type: 'application/pdf' });
+        await pdfWorker.save();
 
-        // Native Mobile Share API
-        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
-          await navigator.share({
-            files: [pdfFile],
-            title: `${CONFIG.storeName} Order Bill`,
-            text: `Attached is my order bill from ${CONFIG.storeName}.`
-          });
-        } else {
-          // Desktop Browser Fallback
-          pdfWorker.save();
-          const fallbackMessage = encodeURIComponent(`Hello ${CONFIG.storeName}, I have placed an order and generated my bill PDF.\n\n*Grand Total: ₹${grandTotal.toFixed(2)}*\n\n(PDF downloaded to my device)`);
-          window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${fallbackMessage}`, '_blank');
-        }
+        // 2. Open WhatsApp with formatted order message
+        const encodedText = encodeURIComponent(orderText);
+        window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodedText}`, '_blank');
       } catch (e) {
-        console.error("PDF generation or sharing error:", e);
-        alert("Unable to open native file share. Opening WhatsApp fallback.");
-        const fallbackMessage = encodeURIComponent(`Hello ${CONFIG.storeName}, I have placed an order.\n\n*Grand Total: ₹${grandTotal.toFixed(2)}*`);
-        window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${fallbackMessage}`, '_blank');
+        console.error("PDF generation error:", e);
+        alert("An error occurred while generating the PDF. Opening WhatsApp fallback.");
+        const encodedText = encodeURIComponent(orderText);
+        window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodedText}`, '_blank');
       }
     }
 
