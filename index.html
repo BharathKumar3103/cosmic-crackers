@@ -28,7 +28,7 @@
     body {
       background-color: var(--bg-color);
       color: var(--text-color);
-      padding-bottom: 110px;
+      padding-bottom: 120px;
     }
 
     header {
@@ -78,7 +78,7 @@
 
     .table-container {
       width: 100%;
-      overflow-x: hidden; /* Prevents horizontal scrolling */
+      overflow-x: hidden;
       background: white;
       border-radius: 6px;
       box-shadow: 0 1px 5px rgba(0,0,0,0.08);
@@ -86,7 +86,7 @@
 
     table {
       width: 100%;
-      table-layout: fixed; /* Fits table strictly to mobile screen width */
+      table-layout: fixed;
       border-collapse: collapse;
       text-align: center;
       font-size: 0.75rem;
@@ -106,7 +106,6 @@
       font-size: 0.72rem;
     }
 
-    /* Column Widths optimized for Mobile */
     .col-sno { width: 8%; }
     .col-name { width: 34%; text-align: left; }
     .col-unit { width: 11%; }
@@ -138,7 +137,6 @@
       font-size: 0.75rem;
     }
 
-    /* Stepper + / - Controls */
     .qty-stepper {
       display: flex;
       align-items: center;
@@ -190,9 +188,10 @@
 
     .cart-info {
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
       align-items: center;
       width: 100%;
+      padding: 0 4px;
     }
 
     .cart-info div {
@@ -202,14 +201,19 @@
     }
 
     .cart-info span.label {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       color: #adb5bd;
     }
 
     .cart-info span.value {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: bold;
       color: var(--accent-color);
+    }
+
+    .cart-info span.total-act {
+      color: #e0e0e0;
+      text-decoration: line-through;
     }
 
     .btn-order {
@@ -226,66 +230,62 @@
     }
 
     /* Hidden Invoice Template for PDF Generation */
-    <!-- Hidden Container for PDF Bill -->
-  <div id="invoice-template">
-    <h2>COSMIC CRACKERS</h2>
-    <p>Sivakasi Wholesale Crackers | Contact: 8667784874</p>
-    <hr style="margin-bottom: 15px;" />
-    <table>
-      <thead>
-        <tr>
-          <th>S.No</th>
-          <th>Product Name</th>
-          <th>Unit</th>
-          <th>Price</th>
-          <th>Qty</th>
-          <th>Subtotal</th>
-        </tr>
-      </thead>
-      <tbody id="invoiceTableBody">
-        <!-- Dynamically injected -->
-      </tbody>
-    </table>
-    <div style="text-align: right; margin-bottom: 15px; font-size: 0.95rem; line-height: 1.6;">
-      <p><strong>Total Amount: <span id="pdfTotalAmount">₹0.00</span></strong></p>
-      <p><strong>Total Savings: <span id="pdfSavings">₹0.00</span></strong></p>
-      <p style="font-size: 1.1rem; color: #d90429;"><strong>Grand Total: <span id="pdfGrandTotal">₹0.00</span></strong></p>
-    </div>
-    <div class="invoice-footer">
-      <h3>Thank you & Happy Diwali! 🪔✨</h3>
-      <p style="margin-top: 5px; font-size: 0.85rem; color: #555;">Cosmic Crackers - Light Up Your Celebrations</p>
-    </div>
-  </div>
-    /* Desktop View Adjustments */
+    #invoice-template {
+      display: none;
+      padding: 20px;
+      background: #fff;
+      color: #000;
+      font-family: Arial, sans-serif;
+    }
+
+    #invoice-template h2 {
+      text-align: center;
+      color: #d90429;
+      margin-bottom: 5px;
+    }
+
+    #invoice-template p {
+      text-align: center;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    #invoice-template table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+
+    #invoice-template th, #invoice-template td {
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      font-size: 0.85rem;
+    }
+
+    #invoice-template th {
+      background-color: #f1f1f1;
+    }
+
+    .invoice-footer {
+      text-align: center;
+      margin-top: 25px;
+      padding-top: 15px;
+      border-top: 2px dashed #d90429;
+    }
+
+    .invoice-footer h3 {
+      color: #1d3557;
+      font-size: 1.2rem;
+    }
+
     @media (min-width: 769px) {
-      table {
-        font-size: 0.95rem;
-      }
-      th, td {
-        padding: 10px 12px;
-      }
-      .btn-qty {
-        width: 28px;
-        height: 28px;
-        font-size: 1rem;
-      }
-      .qty-count {
-        width: 30px;
-        font-size: 0.95rem;
-      }
-      .cart-bar {
-        flex-direction: row;
-        justify-content: space-between;
-        padding: 1rem 2rem;
-      }
-      .cart-info {
-        width: auto;
-        gap: 2rem;
-      }
-      .btn-order {
-        width: auto;
-        padding: 0.8rem 1.5rem;
-      }
+      table { font-size: 0.95rem; }
+      th, td { padding: 10px 12px; }
+      .btn-qty { width: 28px; height: 28px; font-size: 1rem; }
+      .qty-count { width: 30px; font-size: 0.95rem; }
+      .cart-bar { flex-direction: row; justify-content: space-between; padding: 1rem 2rem; }
+      .cart-info { width: auto; gap: 2rem; }
+      .btn-order { width: auto; padding: 0.8rem 1.5rem; }
     }
   </style>
 </head>
@@ -320,7 +320,7 @@
     </div>
   </div>
 
-  <!-- Cart Footer -->
+  <!-- Cart Footer with Total Amount on Screen -->
   <div class="cart-bar">
     <div class="cart-info">
       <div>
@@ -328,7 +328,11 @@
         <span class="value" id="totalItems">0</span>
       </div>
       <div>
-        <span class="label">Savings</span>
+        <span class="label">Total Amount</span>
+        <span class="value total-act" id="totalAmount">₹0.00</span>
+      </div>
+      <div>
+        <span class="label">Total Savings</span>
         <span class="value" id="totalSavings">₹0.00</span>
       </div>
       <div>
@@ -359,7 +363,8 @@
         <!-- Dynamically injected -->
       </tbody>
     </table>
-    <div style="text-align: right; margin-bottom: 15px; font-size: 0.95rem;">
+    <div style="text-align: right; margin-bottom: 15px; font-size: 0.95rem; line-height: 1.6;">
+      <p><strong>Total Amount: <span id="pdfTotalAmount">₹0.00</span></strong></p>
       <p><strong>Total Savings: <span id="pdfSavings">₹0.00</span></strong></p>
       <p style="font-size: 1.1rem; color: #d90429;"><strong>Grand Total: <span id="pdfGrandTotal">₹0.00</span></strong></p>
     </div>
@@ -620,6 +625,7 @@
       const totalSavings = totalActual - grandTotal;
 
       document.getElementById('totalItems').innerText = totalQty;
+      document.getElementById('totalAmount').innerText = `₹${totalActual.toFixed(2)}`;
       document.getElementById('grandTotal').innerText = `₹${grandTotal.toFixed(2)}`;
       document.getElementById('totalSavings').innerText = `₹${totalSavings.toFixed(2)}`;
     }
@@ -642,7 +648,7 @@
       });
     }
 
-   async function processOrderAndPDF() {
+    async function processOrderAndPDF() {
       let hasItems = false;
       let grandTotal = 0;
       let totalActual = 0;
@@ -714,7 +720,6 @@
       window.open(`https://wa.me/918667784874?text=${encodedText}`, '_blank');
     }
 
-    // Initialize table
     renderTable();
   </script>
 </body>
