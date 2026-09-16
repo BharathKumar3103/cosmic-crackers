@@ -73,7 +73,7 @@
       font-size: 1rem;
       border: 2px solid var(--border-color);
       border-radius: 8px;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       outline: none;
       -webkit-appearance: none;
     }
@@ -82,25 +82,38 @@
       border-color: var(--secondary-color);
     }
 
+    /* Scroll tip for mobiles */
+    .scroll-hint {
+      display: none;
+      font-size: 0.8rem;
+      color: #6c757d;
+      text-align: right;
+      margin-bottom: 0.5rem;
+      font-style: italic;
+    }
+
     .table-container {
+      width: 100%;
       overflow-x: auto;
       background: white;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
       -webkit-overflow-scrolling: touch;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border-color);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      min-width: 600px;
+      min-width: 680px; /* Forces horizontal scroll on smaller viewports */
     }
 
     th, td {
       padding: 12px 14px;
       border-bottom: 1px solid var(--border-color);
-      word-wrap: break-word;
+      white-space: nowrap; /* Prevents awkward text wrapping inside cells during scrolling */
     }
 
     th {
@@ -109,6 +122,7 @@
       font-weight: 600;
       position: sticky;
       top: 0;
+      z-index: 10;
     }
 
     .category-header {
@@ -224,6 +238,9 @@
     }
 
     @media (max-width: 768px) {
+      .scroll-hint {
+        display: block; /* Show mobile swipe hint */
+      }
       .cart-bar {
         flex-direction: column;
         gap: 0.8rem;
@@ -260,6 +277,8 @@
 
   <div class="container">
     <input type="text" id="searchInput" class="search-box" placeholder="Search products..." onkeyup="filterProducts()" />
+    
+    <div class="scroll-hint">Swipe horizontally to view prices and quantities &rarr;</div>
 
     <div class="table-container">
       <table id="priceTable">
@@ -629,7 +648,7 @@
 
       orderText += `\n*Grand Total: ₹${grandTotal.toFixed(2)}*`;
 
-      // 1. Generate & Automatically Download PDF (Non-blank fix)
+      // Generate & Automatically Download PDF
       const { jsPDF } = window.jspdf;
       if (jsPDF) {
         const doc = new jsPDF();
@@ -687,11 +706,10 @@
         doc.setTextColor(100, 100, 100);
         doc.text("Thank you for choosing Cosmic Crackers! Happy Diwali!", 105, finalY + 34, { align: "center" });
 
-        // Trigger direct file save without blank windows
         doc.save("Cosmic_Crackers_Invoice.pdf");
       }
 
-      // 2. Open WhatsApp with order details
+      // Open WhatsApp with order details
       const encodedText = encodeURIComponent(orderText);
       setTimeout(() => {
         window.open(`https://wa.me/918667784874?text=${encodedText}`, '_blank');
