@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Cosmic Crackers - Online Store & Invoice Generator</title>
-  <!-- html2pdf.js bundle CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cosmic Crackers - Diwali Price List 2026</title>
   <style>
+    :root {
+      --primary-color: #d90429;
+      --secondary-color: #ef233c;
+      --accent-color: #ffb703;
+      --bg-color: #f8f9fa;
+      --text-color: #2b2d42;
+      --border-color: #dee2e6;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -14,262 +21,190 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    /* Prevent Horizontal Scrolling on Mobile and Desktop */
-    html, body {
-      width: 100%;
-      max-width: 100%;
-      overflow-x: hidden;
-      background-color: #1a1a2e;
-      color: #e0e0e0;
-      padding-bottom: 90px;
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      padding-bottom: 100px;
     }
 
-    /* Header */
     header {
-      width: 100%;
-      background: linear-gradient(135deg, #16213e, #0f3460);
-      color: #e94560;
+      background: linear-gradient(135deg, #1d3557, #457b9d);
+      color: white;
       text-align: center;
-      padding: 20px 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-      border-bottom: 3px solid #e94560;
+      padding: 2rem 1rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
     header h1 {
-      font-size: 1.8rem;
+      font-size: 2.5rem;
+      color: var(--accent-color);
       letter-spacing: 1px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-      margin-bottom: 5px;
-      word-wrap: break-word;
     }
 
     header p {
-      color: #00fff5;
-      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
     }
 
-    /* Main Container */
+    .badge {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+
     .container {
-      width: 100%;
-      max-width: 900px;
-      margin: 15px auto;
-      padding: 0 10px;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
     }
 
-    /* Responsive Table Styles (Fixed Layout prevents horizontal spill) */
-    .table-container {
+    .search-box {
       width: 100%;
-      background-color: #16213e;
-      border-radius: 10px;
+      padding: 0.8rem 1.2rem;
+      font-size: 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-box:focus {
+      border-color: var(--secondary-color);
+    }
+
+    .table-container {
       overflow-x: auto;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      table-layout: fixed;
     }
 
     th, td {
-      padding: 10px 6px;
-      border-bottom: 1px solid #1a1a2e;
-      font-size: 0.85rem;
-      word-wrap: break-word;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
     }
 
     th {
-      background-color: #0f3460;
-      color: #00fff5;
-      text-transform: uppercase;
-      font-size: 0.8rem;
-      letter-spacing: 0.5px;
-    }
-
-    tr:hover {
-      background-color: rgba(233, 69, 96, 0.1);
-    }
-
-    .item-name {
+      background-color: #212529;
+      color: white;
       font-weight: 600;
-      color: #fff;
+      position: sticky;
+      top: 0;
+    }
+
+    .category-header {
+      background-color: #e9ecef;
+      font-weight: bold;
+      color: #1d3557;
+      font-size: 1.1rem;
     }
 
     .actual-price {
       text-decoration: line-through;
-      color: #888;
-      font-size: 0.75rem;
-      display: block;
+      color: #8d99ae;
+      font-size: 0.9rem;
     }
 
-    .disc-price {
-      color: #00ff88;
+    .discount-price {
+      color: var(--primary-color);
       font-weight: bold;
-    }
-
-    /* Qty Controls */
-    .qty-control {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-    }
-
-    .btn-qty {
-      background-color: #e94560;
-      color: white;
-      border: none;
-      width: 26px;
-      height: 26px;
-      border-radius: 4px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
     }
 
     .qty-input {
-      width: 35px;
-      text-align: center;
-      background: #0f3460;
-      border: 1px solid #00fff5;
-      color: #fff;
+      width: 70px;
+      padding: 6px;
+      border: 1px solid var(--border-color);
       border-radius: 4px;
-      padding: 2px;
-      font-weight: bold;
-      font-size: 0.85rem;
+      text-align: center;
+      font-size: 1rem;
     }
 
-    /* Column Width Allocation */
-    .col-sno { width: 8%; text-align: center; }
-    .col-name { width: 38%; }
-    .col-unit { width: 14%; text-align: center; }
-    .col-price { width: 16%; }
-    .col-qty { width: 14%; text-align: center; }
-    .col-total { width: 10%; text-align: right; }
+    .subtotal {
+      font-weight: bold;
+      color: #2b2d42;
+    }
 
-    /* Bottom Floating Bar */
-    .footer-bar {
+    /* Sticky Cart Footer Bar */
+    .cart-bar {
       position: fixed;
       bottom: 0;
       left: 0;
-      width: 100%;
-      background: #0f3460;
-      padding: 12px 15px;
+      right: 0;
+      background-color: #212529;
+      color: white;
+      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 -4px 15px rgba(0,0,0,0.6);
+      box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
       z-index: 1000;
-      border-top: 2px solid #00fff5;
     }
 
-    .total-box {
-      font-size: 1rem;
+    .cart-info {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .cart-info div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-info span.label {
+      font-size: 0.8rem;
+      color: #adb5bd;
+    }
+
+    .cart-info span.value {
+      font-size: 1.3rem;
       font-weight: bold;
-      color: #fff;
-    }
-
-    .total-box span {
-      color: #00ff88;
-      font-size: 1.2rem;
+      color: var(--accent-color);
     }
 
     .btn-order {
-      background: linear-gradient(45deg, #00ff88, #00b894);
-      color: #000;
-      font-weight: bold;
-      font-size: 0.9rem;
-      padding: 10px 16px;
+      background-color: #25d366;
+      color: white;
       border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 255, 136, 0.4);
-    }
-
-    /* Off-screen PDF Container */
-    #invoice-template-wrapper {
-      position: absolute;
-      top: 0;
-      left: -9999px;
-      width: 800px;
-    }
-
-    #invoice-template {
-      background-color: #ffffff;
-      color: #222222;
-      padding: 30px;
-      font-family: Arial, sans-serif;
-    }
-
-    .pdf-header {
-      text-align: center;
-      border-bottom: 2px solid #e94560;
-      padding-bottom: 15px;
-      margin-bottom: 20px;
-    }
-
-    .pdf-header h2 {
-      color: #e94560;
-      font-size: 24px;
-      margin-bottom: 5px;
-    }
-
-    .pdf-header p {
-      color: #555;
-      font-size: 13px;
-    }
-
-    .pdf-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-    }
-
-    .pdf-table th {
-      background-color: #f2f2f2;
-      color: #333;
-      border: 1px solid #ddd;
-      padding: 8px;
-      font-size: 12px;
-      text-align: left;
-    }
-
-    .pdf-table td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      font-size: 12px;
-      color: #333;
-    }
-
-    .pdf-summary {
-      float: right;
-      width: 260px;
-      margin-top: 10px;
-    }
-
-    .pdf-summary-line {
-      display: flex;
-      justify-content: space-between;
-      padding: 4px 0;
-      font-size: 13px;
-    }
-
-    .pdf-summary-line.grand {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
       font-weight: bold;
-      font-size: 15px;
-      border-top: 2px solid #333;
-      padding-top: 8px;
-      margin-top: 4px;
-      color: #d63031;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.2s;
     }
 
-    .pdf-footer {
-      clear: both;
-      padding-top: 30px;
-      text-align: center;
-      font-size: 11px;
-      color: #777;
+    .btn-order:hover {
+      background-color: #128c7e;
+    }
+
+    @media (max-width: 768px) {
+      .cart-bar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+      }
+      .cart-info {
+        gap: 1rem;
+        width: 100%;
+        justify-content: space-between;
+      }
+      .btn-order {
+        width: 100%;
+        text-align: center;
+      }
     }
   </style>
 </head>
@@ -277,238 +212,353 @@
 
   <header>
     <h1>COSMIC CRACKERS</h1>
-    <p>Diwali Price List & Automatic Bill Generator</p>
+    <p>Sivakasi Wholesale Price List 2026</p>
+    <div class="badge">FLAT 80% DISCOUNT APPLIED</div>
+    <p style="margin-top: 10px; font-size: 0.9rem;">Call / WhatsApp: 8667784874</p>
   </header>
 
   <div class="container">
+    <input type="text" id="searchInput" class="search-box" placeholder="Search products (e.g., Lakshmi, Sparklers, Bomb)..." onkeyup="filterProducts()" />
+
     <div class="table-container">
-      <table>
+      <table id="priceTable">
         <thead>
           <tr>
-            <th class="col-sno">#</th>
-            <th class="col-name">Item Name</th>
-            <th class="col-unit">Unit</th>
-            <th class="col-price">Price</th>
-            <th class="col-qty">Qty</th>
-            <th class="col-total">Total</th>
+            <th>S.No</th>
+            <th>Product Name</th>
+            <th>Unit</th>
+            <th>Actual Price</th>
+            <th>80% Disc. Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
           </tr>
         </thead>
-        <tbody id="productTableBody">
-          <!-- Dynamically Rendered -->
+        <tbody id="tableBody">
+          <!-- Dynamically populated -->
         </tbody>
       </table>
     </div>
   </div>
 
-  <!-- Bottom Bar -->
-  <div class="footer-bar">
-    <div class="total-box">
-      Total: <span id="grandTotalText">₹0.00</span>
-    </div>
-    <button class="btn-order" onclick="processOrderAndPDF()">Generate & Share Order</button>
-  </div>
-
-  <!-- Off-Screen Printable PDF Container -->
-  <div id="invoice-template-wrapper">
-    <div id="invoice-template">
-      <div class="pdf-header">
-        <h2>COSMIC CRACKERS</h2>
-        <p>Official Order Bill & Delivery Invoice</p>
-        <p style="margin-top:4px;">Date: <span id="pdfDate"></span> | Invoice ID: <span id="pdfInvoiceId"></span></p>
+  <!-- Cart Footer -->
+  <div class="cart-bar">
+    <div class="cart-info">
+      <div>
+        <span class="label">Total Items</span>
+        <span class="value" id="totalItems">0</span>
       </div>
-
-      <table class="pdf-table">
-        <thead>
-          <tr>
-            <th style="width: 8%; text-align: center;">S.No</th>
-            <th style="width: 42%;">Item Name</th>
-            <th style="width: 12%; text-align: center;">Unit</th>
-            <th style="width: 13%; text-align: right;">Price</th>
-            <th style="width: 10%; text-align: center;">Qty</th>
-            <th style="width: 15%; text-align: right;">Subtotal</th>
-          </tr>
-        </thead>
-        <tbody id="invoiceTableBody">
-          <!-- Dynamic PDF content -->
-        </tbody>
-      </table>
-
-      <div class="pdf-summary">
-        <div class="pdf-summary-line">
-          <span>Total Original Price:</span>
-          <span id="pdfTotalAmount">₹0.00</span>
-        </div>
-        <div class="pdf-summary-line">
-          <span>Diwali Savings:</span>
-          <span id="pdfSavings" style="color: green;">₹0.00</span>
-        </div>
-        <div class="pdf-summary-line grand">
-          <span>Net Payable Amount:</span>
-          <span id="pdfGrandTotal">₹0.00</span>
-        </div>
+      <div>
+        <span class="label">Total Savings</span>
+        <span class="value" id="totalSavings">₹0.00</span>
       </div>
-
-      <div class="pdf-footer">
-        <p>Thank you for ordering from Cosmic Crackers!</p>
-        <p>Contact / WhatsApp Support: +91 8667784874</p>
+      <div>
+        <span class="label">Grand Total</span>
+        <span class="value" id="grandTotal">₹0.00</span>
       </div>
     </div>
+    <button class="btn-order" onclick="sendWhatsAppOrder()">Order via WhatsApp</button>
   </div>
 
   <script>
-    // Configuration - Updated WhatsApp Number
-    const CONFIG = {
-      whatsappNumber: "918667784874"
-    };
-
-    // Product Catalog
     const rawData = [
-      { id: 101, name: '4" Deluxe Lakshmi', unit: "1 Pkt", actual: 180, disc: 36 },
-      { id: 102, name: '2¾" Kuruvi Crackers', unit: "1 Pkt", actual: 55, disc: 11 },
-      { id: 103, name: "Red Bijili (100 Sound)", unit: "1 Pkt", actual: 50, disc: 16 },
-      { id: 104, name: "Striking Red Fountain", unit: "1 Box", actual: 80, disc: 22 },
-      { id: 105, name: "Hydro Bomb Supreme", unit: "1 Box", actual: 120, disc: 36 },
-      { id: 106, name: "Fancy Peacock Flower Pot", unit: "1 Box", actual: 150, disc: 39 },
-      { id: 107, name: "Electric Green Sparklers", unit: "1 Box", actual: 40, disc: 11 },
-      { id: 108, name: "12 Shot Sky Shot", unit: "1 Box", actual: 250, disc: 85 }
+      { category: "FLASH SOUND CRACKERS" },
+      { id: 1, name: '3½" Lakshmi', unit: "1Pkt", actual: 80, disc: 16 },
+      { id: 2, name: '4" Lakshmi', unit: "1Pkt", actual: 110, disc: 22 },
+      { id: 3, name: '4" Deluxe Lakshmi', unit: "1Pkt", actual: 180, disc: 36 },
+      { id: 4, name: '4" Gold Lakshmi', unit: "1Pkt", actual: 195, disc: 39 },
+      { id: 5, name: '2¾" Kuruvi Crackers', unit: "1Pkt", actual: 55, disc: 11 },
+      { id: 6, name: "Two Sound Crackers", unit: "1Pkt", actual: 195, disc: 39 },
+      { id: 7, name: '5" Mega Deluxe', unit: "1Pkt", actual: 225, disc: 45 },
+
+      { category: "ELECTRIC CRACKERS" },
+      { id: 8, name: "28 Chorsa", unit: "1Pkt", actual: 90, disc: 18 },
+      { id: 9, name: "28 Giant", unit: "1Pkt", actual: 135, disc: 27 },
+      { id: 10, name: "56 Giant", unit: "1Pkt", actual: 270, disc: 54 },
+
+      { category: "DELUXE CRACKERS" },
+      { id: 11, name: "24 Deluxe", unit: "1 Pkt", actual: 300, disc: 60 },
+      { id: 12, name: "50 Deluxe", unit: "1 Pkt", actual: 660, disc: 132 },
+      { id: 13, name: "100 Deluxe", unit: "1 Pkt", actual: 1320, disc: 264 },
+
+      { category: "GARLANDS" },
+      { id: 14, name: "100 Wala", unit: "1 Box", actual: 210, disc: 42 },
+      { id: 15, name: "200 Wala", unit: "1 Box", actual: 420, disc: 84 },
+      { id: 16, name: "300 Wala", unit: "1 Box", actual: 600, disc: 120 },
+      { id: 17, name: "600 Wala", unit: "1 Box", actual: 1080, disc: 216 },
+      { id: 18, name: "1000 Wala", unit: "1 Box", actual: 1650, disc: 330 },
+      { id: 19, name: "2000 Wala", unit: "1 Box", actual: 3300, disc: 660 },
+      { id: 20, name: "5000 Wala", unit: "1 Box", actual: 8250, disc: 1650 },
+      { id: 21, name: "10000 Wala", unit: "1 Box", actual: 16500, disc: 3300 },
+
+      { category: "ATOM BOMBS" },
+      { id: 22, name: "Bullet Bomb Deluxe", unit: "1 Box", actual: 180, disc: 36 },
+      { id: 24, name: "Hydro Bomb Green", unit: "1 Box", actual: 480, disc: 96 },
+      { id: 25, name: "Classic Bomb", unit: "1 Box", actual: 780, disc: 156 },
+      { id: 26, name: "King of King", unit: "1 Box", actual: 660, disc: 132 },
+      { id: 27, name: "Jurassic Agni Bomb Deluxe", unit: "1 Box", actual: 1320, disc: 264 },
+      { id: 28, name: "Digital Bomb", unit: "1 Box", actual: 1500, disc: 300 },
+      { id: 29, name: "Adiyal Paper Bomb", unit: "1 Box", actual: 330, disc: 66 },
+      { id: 30, name: "Mega Paper Bomb", unit: "1 Box", actual: 630, disc: 126 },
+      { id: 31, name: "Colour Paper Bomb", unit: "1 Box", actual: 420, disc: 84 },
+      { id: 32, name: "1Kg Paper Bomb", unit: "1 Box", actual: 1260, disc: 252 },
+
+      { category: "BIJILI CRACKERS" },
+      { id: 33, name: "Red Bijili (50 Pcs)", unit: "1 Box", actual: 75, disc: 15 },
+      { id: 34, name: "Red Bijili (100 Pcs)", unit: "1 Box", actual: 165, disc: 33 },
+      { id: 35, name: "Gold Stripped Bijili (100 Pcs)", unit: "1 Box", actual: 195, disc: 39 },
+
+      { category: "GROUND CHAKKAR" },
+      { id: 36, name: "Ground Chakkar Big (10 Pcs)", unit: "1 Box", actual: 210, disc: 42 },
+      { id: 37, name: "Ground Chakkar Big (25 Pcs)", unit: "1 Box", actual: 480, disc: 96 },
+      { id: 38, name: "Ground Chakkar Special", unit: "1 Box", actual: 420, disc: 84 },
+      { id: 39, name: "Ground Chakkar Deluxe", unit: "1 Box", actual: 720, disc: 144 },
+      { id: 40, name: "Disco Wheel", unit: "1 Box", actual: 720, disc: 144 },
+      { id: 41, name: "Lotus wheel", unit: "1 Box", actual: 1260, disc: 252 },
+      { id: 42, name: "Candil wire Chakkaram", unit: "1 Box", actual: 1380, disc: 276 },
+
+      { category: "FLOWER POTS" },
+      { id: 43, name: "Flower Pots Small", unit: "1 Box", actual: 330, disc: 66 },
+      { id: 44, name: "Flower Pots Big", unit: "1 Box", actual: 420, disc: 84 },
+      { id: 45, name: "Flower Pots Special", unit: "1 Box", actual: 600, disc: 120 },
+      { id: 46, name: "Flower Pots Ashoka", unit: "1 Box", actual: 780, disc: 156 },
+      { id: 47, name: "Flower Pots Deluxe (5 Pcs)", unit: "1 Box", actual: 900, disc: 180 },
+      { id: 48, name: "Flower Pots Colour Kotti", unit: "1 Box", actual: 1200, disc: 240 },
+      { id: 49, name: "Ganga Jamuna", unit: "1 Box", actual: 420, disc: 84 },
+
+      { category: "ROCKETS" },
+      { id: 50, name: "Baby Rocket", unit: "1 Box", actual: 240, disc: 48 },
+      { id: 51, name: "Rocket Bomb", unit: "1 Box", actual: 330, disc: 66 },
+      { id: 52, name: "Lunik Express", unit: "1 Box", actual: 600, disc: 120 },
+      { id: 53, name: "Two Sound Rocket", unit: "1 Box", actual: 660, disc: 132 },
+      { id: 54, name: "Three Sound Rocket", unit: "1 Box", actual: 720, disc: 144 },
+      { id: 55, name: "Whistling Rocket", unit: "1 Box", actual: 1080, disc: 216 },
+
+      { category: "TWINKLING STAR & PENCIL" },
+      { id: 56, name: "1½' Twinkling Star", unit: "1 Box", actual: 120, disc: 24 },
+      { id: 57, name: "4' Twinkling Star", unit: "1 Box", actual: 360, disc: 72 },
+      { id: 58, name: "Lollipop 5Pcs", unit: "1 Box", actual: 1140, disc: 228 },
+      { id: 59, name: "Mercury Candle", unit: "1 Box", actual: 360, disc: 72 },
+      { id: 60, name: "7\" Pencil", unit: "1 Box", actual: 120, disc: 24 },
+      { id: 61, name: "10\" Pencil", unit: "1 Box", actual: 210, disc: 42 },
+      { id: 62, name: "Electric Stone", unit: "1 Box", actual: 60, disc: 12 },
+      { id: 63, name: "Magic Pops", unit: "1 Box", actual: 60, disc: 12 },
+      { id: 64, name: "Kit Kat", unit: "1 Box", actual: 150, disc: 30 },
+      { id: 65, name: "Toys Cartoon", unit: "1 Box", actual: 90, disc: 18 },
+
+      { category: "COLOUR FOUNTAINS" },
+      { id: 66, name: "Tesco Grizz Colour Fountain", unit: "1 Box", actual: 420, disc: 84 },
+      { id: 67, name: "Magic Pambaram (10 Pcs)", unit: "1 Box", actual: 720, disc: 144 },
+      { id: 68, name: "Star King", unit: "1 Box", actual: 780, disc: 156 },
+      { id: 69, name: "Darling Dance Butterfly (10 Pcs)", unit: "1 Box", actual: 480, disc: 96 },
+      { id: 70, name: "Siren (3 Pcs)", unit: "1 Box", actual: 1020, disc: 204 },
+      { id: 71, name: "Pogo (5 Pcs)", unit: "1 Box", actual: 1080, disc: 216 },
+      { id: 72, name: "Disco Shower (5 Pcs)", unit: "1 Box", actual: 600, disc: 120 },
+      { id: 73, name: "Colour Rain (5 Pcs)", unit: "1 Box", actual: 600, disc: 120 },
+      { id: 74, name: "Sky Bloom (Penda) (5 Pcs)", unit: "1 Box", actual: 1080, disc: 216 },
+      { id: 75, name: "Magic Show (2 Pcs)", unit: "1 Box", actual: 1500, disc: 300 },
+
+      { category: "FANCY ITEMS - FOUR COLORS" },
+      { id: 76, name: "Chotta Fancy", unit: "1 Box", actual: 240, disc: 48 },
+      { id: 77, name: '1½" Three in one (3Pcs)', unit: "1 Box", actual: 1500, disc: 300 },
+      { id: 78, name: '2" Fancy', unit: "1 Box", actual: 720, disc: 144 },
+      { id: 79, name: '2" Cyclone Fancy 3 Stop', unit: "1 Box", actual: 1350, disc: 270 },
+      { id: 80, name: '3½" Multicolour Fancy', unit: "1 Box", actual: 1740, disc: 348 },
+      { id: 81, name: '3½" Double Ball Double Action', unit: "1 Box", actual: 2700, disc: 540 },
+      { id: 82, name: '4" Multi Colour Fancy', unit: "1 Box", actual: 2280, disc: 456 },
+      { id: 83, name: '4" MegaAerial Tower (2 Pcs)', unit: "1 Box", actual: 3900, disc: 780 },
+      { id: 84, name: '5½" Mega Super Fancy', unit: "1 Box", actual: 4050, disc: 810 },
+
+      { category: "FANCY NEW ITEMS" },
+      { id: 85, name: "Photo Flash (5 Pcs)", unit: "1 Pce", actual: 480, disc: 96 },
+      { id: 86, name: "Doara Singar (5 Pcs)", unit: "1 Box", actual: 1020, disc: 204 },
+      { id: 87, name: "Rainbow Colour Smoke (3 Pcs)", unit: "1 Box", actual: 960, disc: 192 },
+      { id: 88, name: "Teen Beer", unit: "1 Box", actual: 780, disc: 156 },
+      { id: 89, name: "Jelly Bean Candle (3 Pcs)", unit: "1 Box", actual: 540, disc: 108 },
+      { id: 90, name: "Peacock", unit: "1 Box", actual: 1080, disc: 216 },
+      { id: 91, name: "Tri Colour (5 Pcs)", unit: "1 Box", actual: 1560, disc: 312 },
+      { id: 92, name: "Pawpatrol & Spiderman", unit: "1 Box", actual: 840, disc: 168 },
+      { id: 93, name: "Heli Copter (5 Pcs)", unit: "1 Box", actual: 660, disc: 132 },
+      { id: 94, name: "Bada Peacock", unit: "1 Box", actual: 2700, disc: 540 },
+      { id: 95, name: "Smoke Cylinder Bomb", unit: "1 Box", actual: 1980, disc: 396 },
+      { id: 96, name: "Rainbow Colour Fountain", unit: "1 Box", actual: 1680, disc: 336 },
+      { id: 97, name: "Sona Myur Anar (2 Pcs)", unit: "1 Box", actual: 1320, disc: 264 },
+      { id: 98, name: "Crackling Fountain", unit: "1 Box", actual: 1680, disc: 336 },
+      { id: 99, name: "Water Queen", unit: "1 Box", actual: 1140, disc: 228 },
+      { id: 100, name: "Rainy Shiny", unit: "1 Box", actual: 1440, disc: 288 },
+      { id: 101, name: "Old is Gold (90's Kids)", unit: "1 Box", actual: 1200, disc: 240 },
+      { id: 102, name: "T20 Twenty Crackling Fashion", unit: "1 Box", actual: 900, disc: 180 },
+
+      { category: "FANCY SHOT ITEMS" },
+      { id: 103, name: "7 Shot Colour (5 Pcs)", unit: "1 Box", actual: 600, disc: 120 },
+      { id: 104, name: "12 Shot Ball Colour Rider", unit: "1 Box", actual: 1140, disc: 228 },
+      { id: 105, name: "12 Shot Multi Colour", unit: "1 Box", actual: 1440, disc: 288 },
+      { id: 106, name: "30 Shot Treat Multi Colour", unit: "1 Box", actual: 2850, disc: 570 },
+      { id: 107, name: "60 Shot Jamaican Multi Colour", unit: "1 Box", actual: 5700, disc: 1140 },
+      { id: 108, name: "120 Shot Star Show Multi Colour", unit: "1 Box", actual: 11400, disc: 2280 },
+      { id: 109, name: "Special Winner", unit: "1 Box", actual: 25500, disc: 5100 },
+      { id: 110, name: "240 Shot Multi Colour", unit: "1 Box", actual: 22800, disc: 4560 },
+      { id: 111, name: "504 Shot Multi Colour", unit: "1 Box", actual: 48000, disc: 9600 },
+      { id: 112, name: 'Bharat Rathna (2½" Comet)', unit: "1 Box", actual: 25500, disc: 5100 },
+      { id: 113, name: '30 Shot Universal (2½" Comet)', unit: "1 Box", actual: 33000, disc: 6600 },
+
+      { category: "SPARKLERS" },
+      { id: 114, name: "7 Cm Electric (10 Pcs)", unit: "1 Box", actual: 50, disc: 10 },
+      { id: 115, name: '3½" Lakshmi Sparklers', unit: "1 Box", actual: 60, disc: 12 },
+      { id: 116, name: "7 Cm Green (10 Pcs)", unit: "1 Box", actual: 65, disc: 13 },
+      { id: 117, name: "7 Cm Red (10 Pcs)", unit: "1 Box", actual: 75, disc: 15 },
+      { id: 118, name: "10 Cm Electric (10 Pcs)", unit: "1 Box", actual: 105, disc: 21 },
+      { id: 119, name: "10 Cm Colour (10 Pcs)", unit: "1 Box", actual: 120, disc: 24 },
+      { id: 120, name: "10 Cm Green (10 Pcs)", unit: "1 Box", actual: 135, disc: 27 },
+      { id: 121, name: "10 Cm Red (10 Pcs)", unit: "1 Box", actual: 150, disc: 30 },
+      { id: 122, name: "12 Cm Electric (10 Pcs)", unit: "1 Box", actual: 165, disc: 33 },
+      { id: 123, name: "12 Cm Colour (10 Pcs)", unit: "1 Box", actual: 180, disc: 36 },
+      { id: 124, name: "12 Cm Green (10 Pcs)", unit: "1 Box", actual: 195, disc: 39 },
+      { id: 125, name: "12 Cm Red (10 Pcs)", unit: "1 Box", actual: 210, disc: 42 },
+      { id: 126, name: "15 Cm Electric (10 Pcs)", unit: "1 Box", actual: 240, disc: 48 },
+      { id: 127, name: "15 Cm Colour (10 Pcs)", unit: "1 Box", actual: 255, disc: 51 },
+      { id: 128, name: "15 Cm Green (10 Pcs)", unit: "1 Box", actual: 270, disc: 54 },
+      { id: 129, name: "15 Cm Red (10 Pcs)", unit: "1 Box", actual: 285, disc: 57 },
+      { id: 130, name: "30 Cm Electric (5 Pcs)", unit: "1 Box", actual: 240, disc: 48 },
+      { id: 131, name: "30 Cm Colour (5 Pcs)", unit: "1 Box", actual: 255, disc: 51 },
+      { id: 132, name: "30 Cm Green (5 Pcs)", unit: "1 Box", actual: 270, disc: 54 },
+      { id: 133, name: "30 Cm Red (5 Pcs)", unit: "1 Box", actual: 285, disc: 57 },
+      { id: 134, name: "50 Cm Electric (5 Pcs)", unit: "1 Box", actual: 1080, disc: 216 },
+      { id: 135, name: "50 Cm Colour (5 Pcs)", unit: "1 Box", actual: 1200, disc: 240 },
+
+      { category: "COLOUR MATCHES & NOVELTIES" },
+      { id: 136, name: "Sadha Matches Red & Green", unit: "1 Box", actual: 80, disc: 16 },
+      { id: 137, name: "Mini Deluxe", unit: "1 Box", actual: 300, disc: 60 },
+      { id: 138, name: "Matrix", unit: "1 Box", actual: 480, disc: 96 },
+      { id: 139, name: "Blooms", unit: "1 Box", actual: 840, disc: 168 },
+      { id: 140, name: "10 in 1 Mega Laptop", unit: "1 Box", actual: 1500, disc: 300 },
+      { id: 141, name: "Roll Cap", unit: "1 Box", actual: 360, disc: 72 },
+      { id: 142, name: "Serpent Eggs Big", unit: "1 Doz", actual: 120, disc: 24 },
+      { id: 143, name: "Anaconda", unit: "1 Box", actual: 540, disc: 108 },
+      { id: 144, name: "Angry Bird", unit: "1 Box", actual: 60, disc: 12 },
+
+      { category: "FESTIVAL ITEMS" },
+      { id: 145, name: "1000 Wala", unit: "1 Box", actual: 960, disc: 192 },
+      { id: 146, name: "2000 Wala", unit: "1 Box", actual: 1920, disc: 384 },
+      { id: 147, name: "5000 Wala", unit: "1 Box", actual: 4800, disc: 960 },
+      { id: 148, name: "10000 Wala", unit: "1 Box", actual: 9600, disc: 1920 },
+      { id: 149, name: "12 Shot Rider", unit: "1 Box", actual: 600, disc: 120 },
+      { id: 150, name: "25 Shot Rider", unit: "1 Box", actual: 1260, disc: 252 },
+      { id: 151, name: "50 Shot Rider", unit: "1 Box", actual: 2520, disc: 504 },
+      { id: 152, name: "100 Shot Rider", unit: "1 Box", actual: 4920, disc: 984 }
     ];
 
     const quantities = {};
 
-    function renderProducts() {
-      const tbody = document.getElementById('productTableBody');
+    function renderTable() {
+      const tbody = document.getElementById('tableBody');
       tbody.innerHTML = '';
 
-      rawData.forEach((item, idx) => {
-        quantities[item.id] = quantities[item.id] || 0;
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="col-sno">${idx + 1}</td>
-          <td class="col-name item-name">${item.name}</td>
-          <td class="col-unit">${item.unit}</td>
-          <td class="col-price">
-            <span class="actual-price">₹${item.actual}</span>
-            <span class="disc-price">₹${item.disc}</span>
-          </td>
-          <td class="col-qty">
-            <div class="qty-control">
-              <button class="btn-qty" onclick="updateQty(${item.id}, -1)">-</button>
-              <input type="text" class="qty-input" id="input-${item.id}" value="${quantities[item.id]}" readonly>
-              <button class="btn-qty" onclick="updateQty(${item.id}, 1)">+</button>
-            </div>
-          </td>
-          <td class="col-total" style="font-weight: bold; color: #00fff5;" id="subtotal-${item.id}">
-            ₹0
-          </td>
-        `;
-        tbody.appendChild(tr);
+      rawData.forEach(item => {
+        if (item.category) {
+          const catRow = document.createElement('tr');
+          catRow.className = 'category-header';
+          catRow.innerHTML = `<td colspan="7">${item.category}</td>`;
+          tbody.appendChild(catRow);
+        } else {
+          const row = document.createElement('tr');
+          row.setAttribute('data-name', item.name.toLowerCase());
+          row.innerHTML = `
+            <td>${item.id}</td>
+            <td>${item.name}</td>
+            <td>${item.unit}</td>
+            <td class="actual-price">₹${item.actual.toFixed(2)}</td>
+            <td class="discount-price">₹${item.disc.toFixed(2)}</td>
+            <td>
+              <input type="number" min="0" value="${quantities[item.id] || 0}" class="qty-input" onchange="updateQty(${item.id}, this.value)" oninput="updateQty(${item.id}, this.value)">
+            </td>
+            <td class="subtotal" id="subtotal-${item.id}">₹0.00</td>
+          `;
+          tbody.appendChild(row);
+        }
       });
-
-      calculateTotals();
     }
 
-    function updateQty(id, change) {
-      const current = quantities[id] || 0;
-      const updated = Math.max(0, current + change);
-      quantities[id] = updated;
-
-      document.getElementById(`input-${id}`).value = updated;
+    function updateQty(id, qty) {
+      const parsedQty = parseInt(qty) || 0;
+      quantities[id] = parsedQty < 0 ? 0 : parsedQty;
+      
+      const item = rawData.find(i => i.id === id);
+      if (item) {
+        const subtotal = quantities[id] * item.disc;
+        const subtotalElem = document.getElementById(`subtotal-${id}`);
+        if (subtotalElem) {
+          subtotalElem.innerText = `₹${subtotal.toFixed(2)}`;
+        }
+      }
       calculateTotals();
     }
 
     function calculateTotals() {
+      let totalQty = 0;
       let grandTotal = 0;
+      let totalActual = 0;
 
       rawData.forEach(item => {
-        const q = quantities[item.id] || 0;
-        const subtotal = q * item.disc;
-        grandTotal += subtotal;
-
-        const subtotalEl = document.getElementById(`subtotal-${item.id}`);
-        if (subtotalEl) {
-          subtotalEl.innerText = `₹${subtotal}`;
+        if (item.id && quantities[item.id]) {
+          const q = quantities[item.id];
+          totalQty += q;
+          grandTotal += q * item.disc;
+          totalActual += q * item.actual;
         }
       });
 
-      document.getElementById('grandTotalText').innerText = `₹${grandTotal.toFixed(2)}`;
+      const totalSavings = totalActual - grandTotal;
+
+      document.getElementById('totalItems').innerText = totalQty;
+      document.getElementById('grandTotal').innerText = `₹${grandTotal.toFixed(2)}`;
+      document.getElementById('totalSavings').innerText = `₹${totalSavings.toFixed(2)}`;
     }
 
-    async function processOrderAndPDF() {
+    function filterProducts() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const rows = document.querySelectorAll('#tableBody tr');
+
+      rows.forEach(row => {
+        if (row.classList.contains('category-header')) {
+          row.style.display = '';
+        } else {
+          const name = row.getAttribute('data-name');
+          if (name && name.includes(query)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        }
+      });
+    }
+
+    function sendWhatsAppOrder() {
+      let orderText = "Hello Cosmic Crackers, I would like to place an order:\n\n";
       let hasItems = false;
       let grandTotal = 0;
-      let totalActual = 0;
-      let pdfTableHTML = "";
 
-      let orderText = "Hello Cosmic Crackers, I have placed an order.\n\n*Order Summary:*\n";
-
-      let count = 1;
       rawData.forEach(item => {
-        const q = quantities[item.id] || 0;
-        if (q > 0) {
+        if (item.id && quantities[item.id] > 0) {
           hasItems = true;
+          const q = quantities[item.id];
           const subtotal = q * item.disc;
           grandTotal += subtotal;
-          totalActual += q * item.actual;
-
-          pdfTableHTML += `
-            <tr>
-              <td style="text-align: center;">${count++}</td>
-              <td>${item.name}</td>
-              <td style="text-align: center;">${item.unit}</td>
-              <td style="text-align: right;">₹${item.disc.toFixed(2)}</td>
-              <td style="text-align: center;">${q}</td>
-              <td style="text-align: right;">₹${subtotal.toFixed(2)}</td>
-            </tr>
-          `;
-
           orderText += `• ${item.name} (${item.unit}) x ${q} = ₹${subtotal.toFixed(2)}\n`;
         }
       });
 
       if (!hasItems) {
-        alert("Please select at least one item before generating the bill.");
+        alert("Please select at least one item before ordering.");
         return;
       }
 
-      const totalSavings = totalActual - grandTotal;
-      const invoiceId = "CC-" + Math.floor(100000 + Math.random() * 900000);
-      const currentDate = new Date().toLocaleDateString();
-
-      orderText += `\n*Total Market Price: ₹${totalActual.toFixed(2)}*`;
-      orderText += `\n*Total Savings: ₹${totalSavings.toFixed(2)}*`;
-      orderText += `\n*Grand Total: ₹${grandTotal.toFixed(2)}*\n\n`;
-      orderText += `📌 *Note:* My PDF Bill has been saved to my Downloads folder. I will attach it below.`;
-
-      document.getElementById('invoiceTableBody').innerHTML = pdfTableHTML;
-      document.getElementById('pdfTotalAmount').innerText = `₹${totalActual.toFixed(2)}`;
-      document.getElementById('pdfSavings').innerText = `₹${totalSavings.toFixed(2)}`;
-      document.getElementById('pdfGrandTotal').innerText = `₹${grandTotal.toFixed(2)}`;
-      document.getElementById('pdfDate').innerText = currentDate;
-      document.getElementById('pdfInvoiceId').innerText = invoiceId;
-
-      const element = document.getElementById('invoice-template');
-
-      const opt = {
-        margin:       0.3,
-        filename:     `Cosmic_Crackers_Invoice_${invoiceId}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, logging: false },
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-      };
-
-      try {
-        await html2pdf().set(opt).from(element).save();
-        const encodedText = encodeURIComponent(orderText);
-        window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodedText}`, '_blank');
-      } catch (err) {
-        console.error("PDF Export Error: ", err);
-        const encodedText = encodeURIComponent(orderText);
-        window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodedText}`, '_blank');
-      }
+      orderText += `\n*Grand Total: ₹${grandTotal.toFixed(2)}*`;
+      const encodedText = encodeURIComponent(orderText);
+      window.open(`https://wa.me/918667784874?text=${encodedText}`, '_blank');
     }
 
-    window.onload = renderProducts;
+    // Initialize
+    renderTable();
   </script>
 </body>
 </html>
