@@ -14,7 +14,7 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    /* Prevent Horizontal Scrolling Across All Screens */
+    /* Prevent Horizontal Scrolling on Mobile and Desktop */
     html, body {
       width: 100%;
       max-width: 100%;
@@ -56,12 +56,12 @@
       padding: 0 10px;
     }
 
-    /* Table Container & Wrapping */
+    /* Responsive Table Styles (Fixed Layout prevents horizontal spill) */
     .table-container {
       width: 100%;
       background-color: #16213e;
       border-radius: 10px;
-      overflow-x: hidden;
+      overflow-x: auto;
       box-shadow: 0 8px 20px rgba(0,0,0,0.4);
     }
 
@@ -73,18 +73,17 @@
     }
 
     th, td {
-      padding: 10px 4px;
+      padding: 10px 6px;
       border-bottom: 1px solid #1a1a2e;
       font-size: 0.85rem;
       word-wrap: break-word;
-      overflow-wrap: break-word;
     }
 
     th {
       background-color: #0f3460;
       color: #00fff5;
       text-transform: uppercase;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       letter-spacing: 0.5px;
     }
 
@@ -114,23 +113,23 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 2px;
+      gap: 4px;
     }
 
     .btn-qty {
       background-color: #e94560;
       color: white;
       border: none;
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       border-radius: 4px;
-      font-size: 0.9rem;
+      font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
     }
 
     .qty-input {
-      width: 30px;
+      width: 35px;
       text-align: center;
       background: #0f3460;
       border: 1px solid #00fff5;
@@ -138,16 +137,16 @@
       border-radius: 4px;
       padding: 2px;
       font-weight: bold;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
     }
 
-    /* Strict Mobile Table Width Allocation */
-    .col-sno { width: 7%; text-align: center; }
-    .col-name { width: 37%; }
+    /* Column Width Allocation */
+    .col-sno { width: 8%; text-align: center; }
+    .col-name { width: 38%; }
     .col-unit { width: 14%; text-align: center; }
     .col-price { width: 16%; }
     .col-qty { width: 14%; text-align: center; }
-    .col-total { width: 12%; text-align: right; }
+    .col-total { width: 10%; text-align: right; }
 
     /* Bottom Floating Bar */
     .footer-bar {
@@ -166,68 +165,65 @@
     }
 
     .total-box {
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: bold;
       color: #fff;
     }
 
     .total-box span {
       color: #00ff88;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
     }
 
     .btn-order {
       background: linear-gradient(45deg, #00ff88, #00b894);
       color: #000;
       font-weight: bold;
-      font-size: 0.85rem;
-      padding: 10px 14px;
+      font-size: 0.9rem;
+      padding: 10px 16px;
       border: none;
       border-radius: 25px;
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(0, 255, 136, 0.4);
     }
 
-    /* Off-screen Printable PDF Template - Visible to DOM during capture to prevent blank output */
+    /* Off-screen PDF Container */
     #invoice-template-wrapper {
       position: absolute;
       top: 0;
-      left: 0;
-      z-index: -9999;
-      opacity: 0;
-      pointer-events: none;
-      width: 750px;
+      left: -9999px;
+      width: 800px;
     }
 
     #invoice-template {
       background-color: #ffffff;
       color: #222222;
-      padding: 25px;
+      padding: 30px;
       font-family: Arial, sans-serif;
     }
 
     .pdf-header {
       text-align: center;
       border-bottom: 2px solid #e94560;
-      padding-bottom: 12px;
-      margin-bottom: 15px;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
     }
 
     .pdf-header h2 {
       color: #e94560;
-      font-size: 22px;
-      margin-bottom: 4px;
+      font-size: 24px;
+      margin-bottom: 5px;
     }
 
     .pdf-header p {
       color: #555;
-      font-size: 12px;
+      font-size: 13px;
     }
 
     .pdf-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
 
     .pdf-table th {
@@ -248,29 +244,29 @@
 
     .pdf-summary {
       float: right;
-      width: 250px;
-      margin-top: 5px;
+      width: 260px;
+      margin-top: 10px;
     }
 
     .pdf-summary-line {
       display: flex;
       justify-content: space-between;
-      padding: 3px 0;
-      font-size: 12px;
+      padding: 4px 0;
+      font-size: 13px;
     }
 
     .pdf-summary-line.grand {
       font-weight: bold;
-      font-size: 14px;
+      font-size: 15px;
       border-top: 2px solid #333;
-      padding-top: 6px;
+      padding-top: 8px;
       margin-top: 4px;
       color: #d63031;
     }
 
     .pdf-footer {
       clear: both;
-      padding-top: 25px;
+      padding-top: 30px;
       text-align: center;
       font-size: 11px;
       color: #777;
@@ -304,7 +300,7 @@
     </div>
   </div>
 
-  <!-- Bottom Floating Bar -->
+  <!-- Bottom Bar -->
   <div class="footer-bar">
     <div class="total-box">
       Total: <span id="grandTotalText">₹0.00</span>
@@ -312,7 +308,7 @@
     <button class="btn-order" onclick="processOrderAndPDF()">Generate & Share Order</button>
   </div>
 
-  <!-- Off-Screen Printable PDF Wrapper -->
+  <!-- Off-Screen Printable PDF Container -->
   <div id="invoice-template-wrapper">
     <div id="invoice-template">
       <div class="pdf-header">
@@ -360,12 +356,12 @@
   </div>
 
   <script>
-    // Configuration Target Mobile Number
+    // Configuration - Updated WhatsApp Number
     const CONFIG = {
       whatsappNumber: "918667784874"
     };
 
-    // Catalog Data
+    // Product Catalog
     const rawData = [
       { id: 101, name: '4" Deluxe Lakshmi', unit: "1 Pkt", actual: 180, disc: 36 },
       { id: 102, name: '2¾" Kuruvi Crackers', unit: "1 Pkt", actual: 55, disc: 11 },
@@ -482,7 +478,7 @@
       orderText += `\n*Total Market Price: ₹${totalActual.toFixed(2)}*`;
       orderText += `\n*Total Savings: ₹${totalSavings.toFixed(2)}*`;
       orderText += `\n*Grand Total: ₹${grandTotal.toFixed(2)}*\n\n`;
-      orderText += `📌 *Note:* My detailed PDF Bill has been saved to my Downloads. I will attach it below.`;
+      orderText += `📌 *Note:* My PDF Bill has been saved to my Downloads folder. I will attach it below.`;
 
       document.getElementById('invoiceTableBody').innerHTML = pdfTableHTML;
       document.getElementById('pdfTotalAmount').innerText = `₹${totalActual.toFixed(2)}`;
@@ -493,12 +489,11 @@
 
       const element = document.getElementById('invoice-template');
 
-      // html2pdf options explicitly configured to eliminate blank white renders
       const opt = {
         margin:       0.3,
         filename:     `Cosmic_Crackers_Invoice_${invoiceId}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, logging: false, scrollX: 0, scrollY: 0 },
+        html2canvas:  { scale: 2, useCORS: true, logging: false },
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
 
