@@ -28,7 +28,7 @@
     body {
       background-color: var(--bg-color);
       color: var(--text-color);
-      padding-bottom: 120px;
+      padding-bottom: 130px;
     }
 
     header {
@@ -229,55 +229,6 @@
       text-align: center;
     }
 
-    /* Hidden Invoice Template for PDF Generation */
-    #invoice-template {
-      display: none;
-      padding: 20px;
-      background: #fff;
-      color: #000;
-      font-family: Arial, sans-serif;
-    }
-
-    #invoice-template h2 {
-      text-align: center;
-      color: #d90429;
-      margin-bottom: 5px;
-    }
-
-    #invoice-template p {
-      text-align: center;
-      font-size: 0.9rem;
-      margin-bottom: 15px;
-    }
-
-    #invoice-template table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 15px;
-    }
-
-    #invoice-template th, #invoice-template td {
-      border: 1px solid #ccc;
-      padding: 6px 8px;
-      font-size: 0.85rem;
-    }
-
-    #invoice-template th {
-      background-color: #f1f1f1;
-    }
-
-    .invoice-footer {
-      text-align: center;
-      margin-top: 25px;
-      padding-top: 15px;
-      border-top: 2px dashed #d90429;
-    }
-
-    .invoice-footer h3 {
-      color: #1d3557;
-      font-size: 1.2rem;
-    }
-
     @media (min-width: 769px) {
       table { font-size: 0.95rem; }
       th, td { padding: 10px 12px; }
@@ -292,10 +243,10 @@
 <body>
 
   <header>
-    <h1>COSMIC CRACKERS</h1>
-    <p>Sivakasi Wholesale Price List 2026</p>
-    <div class="badge">FLAT 80% DISCOUNT APPLIED</div>
-    <p style="margin-top: 6px; font-size: 0.8rem;">Call / WhatsApp: 8667784874</p>
+    <h1 id="headerTitle">COSMIC CRACKERS</h1>
+    <p id="headerSub">Sivakasi Wholesale Price List 2026</p>
+    <div class="badge" id="headerBadge">FLAT 80% DISCOUNT APPLIED</div>
+    <p style="margin-top: 6px; font-size: 0.8rem;">Call / WhatsApp: <span id="headerPhone">8667784874</span></p>
   </header>
 
   <div class="container">
@@ -320,7 +271,7 @@
     </div>
   </div>
 
-  <!-- Cart Footer with Total Amount on Screen -->
+  <!-- Cart Footer -->
   <div class="cart-bar">
     <div class="cart-info">
       <div>
@@ -340,23 +291,23 @@
         <span class="value" id="grandTotal">₹0.00</span>
       </div>
     </div>
-    <button class="btn-order" onclick="processOrderAndPDF()">Generate Bill PDF & Order</button>
+    <button class="btn-order" onclick="processOrderAndPDF()">Generate & Share PDF Order</button>
   </div>
 
-  <!-- Hidden Container for PDF Bill -->
-  <div id="invoice-template">
-    <h2>COSMIC CRACKERS</h2>
-    <p>Sivakasi Wholesale Crackers | Contact: 8667784874</p>
-    <hr style="margin-bottom: 15px;" />
-    <table>
+  <!-- Off-Screen PDF Template Container -->
+  <div id="invoice-template" style="position: absolute; left: -9999px; top: 0; width: 750px; background: #ffffff; color: #000000; padding: 25px; font-family: Arial, sans-serif;">
+    <h2 id="pdfHeaderTitle" style="text-align: center; color: #d90429; margin-bottom: 5px;">COSMIC CRACKERS</h2>
+    <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px;">Sivakasi Wholesale Crackers | Contact: <span id="pdfHeaderPhone">8667784874</span></p>
+    <hr style="margin-bottom: 15px; border: 0; border-top: 1px solid #ccc;" />
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
       <thead>
-        <tr>
-          <th>S.No</th>
-          <th>Product Name</th>
-          <th>Unit</th>
-          <th>Price</th>
-          <th>Qty</th>
-          <th>Subtotal</th>
+        <tr style="background-color: #f1f1f1;">
+          <th style="border: 1px solid #ccc; padding: 8px;">S.No</th>
+          <th style="border: 1px solid #ccc; padding: 8px;">Product Name</th>
+          <th style="border: 1px solid #ccc; padding: 8px;">Unit</th>
+          <th style="border: 1px solid #ccc; padding: 8px;">Price</th>
+          <th style="border: 1px solid #ccc; padding: 8px;">Qty</th>
+          <th style="border: 1px solid #ccc; padding: 8px;">Subtotal</th>
         </tr>
       </thead>
       <tbody id="invoiceTableBody">
@@ -368,13 +319,27 @@
       <p><strong>Total Savings: <span id="pdfSavings">₹0.00</span></strong></p>
       <p style="font-size: 1.1rem; color: #d90429;"><strong>Grand Total: <span id="pdfGrandTotal">₹0.00</span></strong></p>
     </div>
-    <div class="invoice-footer">
-      <h3>Thank you & Happy Diwali! 🪔✨</h3>
+    <div style="text-align: center; margin-top: 25px; padding-top: 15px; border-top: 2px dashed #d90429;">
+      <h3 style="color: #1d3557; font-size: 1.2rem;">Thank you & Happy Diwali! 🪔✨</h3>
       <p style="margin-top: 5px; font-size: 0.85rem; color: #555;">Cosmic Crackers - Light Up Your Celebrations</p>
     </div>
   </div>
 
   <script>
+    /* ==========================================================================
+       SECTION 1: STORE CONFIGURATION (EASY EDIT)
+       ========================================================================== */
+    const CONFIG = {
+      storeName: "COSMIC CRACKERS",
+      subtitle: "Sivakasi Wholesale Price List 2026",
+      phone: "8667784874",
+      whatsappNumber: "918667784874",
+      discountBadgeText: "FLAT 80% DISCOUNT APPLIED"
+    };
+
+    /* ==========================================================================
+       SECTION 2: PRODUCT DATA (EASY EDIT)
+       ========================================================================== */
     const rawData = [
       { category: "FLASH SOUND CRACKERS" },
       { id: 1, name: '3½" Lakshmi', unit: "1Pkt", actual: 80, disc: 16 },
@@ -562,7 +527,19 @@
       { id: 152, name: "100 Shot Rider", unit: "1 Box", actual: 4920, disc: 984 }
     ];
 
+    /* ==========================================================================
+       SECTION 3: APPLICATION LOGIC
+       ========================================================================== */
     const quantities = {};
+
+    function initConfig() {
+      document.getElementById('headerTitle').innerText = CONFIG.storeName;
+      document.getElementById('headerSub').innerText = CONFIG.subtitle;
+      document.getElementById('headerBadge').innerText = CONFIG.discountBadgeText;
+      document.getElementById('headerPhone').innerText = CONFIG.phone;
+      document.getElementById('pdfHeaderTitle').innerText = CONFIG.storeName;
+      document.getElementById('pdfHeaderPhone').innerText = CONFIG.phone;
+    }
 
     function renderTable() {
       const tbody = document.getElementById('tableBody');
@@ -653,7 +630,6 @@
       let grandTotal = 0;
       let totalActual = 0;
       let pdfTableHTML = "";
-      let orderText = "Hello Cosmic Crackers, I have placed an order and generated my bill PDF.\n\n*Order Summary:*\n";
 
       let count = 1;
       rawData.forEach(item => {
@@ -666,16 +642,14 @@
 
           pdfTableHTML += `
             <tr>
-              <td>${count++}</td>
-              <td>${item.name}</td>
-              <td>${item.unit}</td>
-              <td>₹${item.disc.toFixed(2)}</td>
-              <td>${q}</td>
-              <td>₹${subtotal.toFixed(2)}</td>
+              <td style="border: 1px solid #ccc; padding: 6px; text-align: center;">${count++}</td>
+              <td style="border: 1px solid #ccc; padding: 6px;">${item.name}</td>
+              <td style="border: 1px solid #ccc; padding: 6px; text-align: center;">${item.unit}</td>
+              <td style="border: 1px solid #ccc; padding: 6px; text-align: right;">₹${item.disc.toFixed(2)}</td>
+              <td style="border: 1px solid #ccc; padding: 6px; text-align: center;">${q}</td>
+              <td style="border: 1px solid #ccc; padding: 6px; text-align: right;">₹${subtotal.toFixed(2)}</td>
             </tr>
           `;
-
-          orderText += `• ${item.name} (${item.unit}) x ${q} = ₹${subtotal.toFixed(2)}\n`;
         }
       });
 
@@ -685,41 +659,50 @@
       }
 
       const totalSavings = totalActual - grandTotal;
-      orderText += `\n*Total Amount: ₹${totalActual.toFixed(2)}*`;
-      orderText += `\n*Total Savings: ₹${totalSavings.toFixed(2)}*`;
-      orderText += `\n*Grand Total: ₹${grandTotal.toFixed(2)}*\n\n*(PDF Bill downloaded and attached)*`;
 
-      // Populate hidden PDF template values
+      // Inject values into hidden PDF template
       document.getElementById('invoiceTableBody').innerHTML = pdfTableHTML;
       document.getElementById('pdfTotalAmount').innerText = `₹${totalActual.toFixed(2)}`;
       document.getElementById('pdfSavings').innerText = `₹${totalSavings.toFixed(2)}`;
       document.getElementById('pdfGrandTotal').innerText = `₹${grandTotal.toFixed(2)}`;
 
-      // Render PDF
       const element = document.getElementById('invoice-template');
-      element.style.display = 'block';
 
       const opt = {
-        margin:       0.5,
-        filename:     `Cosmic_Crackers_Bill_${Date.now()}.pdf`,
+        margin:       0.3,
+        filename:     `Cosmic_Crackers_Bill.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
+        html2canvas:  { scale: 2, useCORS: true, logging: false },
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
 
       try {
-        await html2pdf().set(opt).from(element).save();
-      } catch (e) {
-        console.error("PDF generation error:", e);
-      } finally {
-        element.style.display = 'none';
-      }
+        const pdfWorker = html2pdf().set(opt).from(element);
+        const pdfBlob = await pdfWorker.output('blob');
+        const pdfFile = new File([pdfBlob], `${CONFIG.storeName.replace(/\s+/g, '_')}_Bill_${Date.now()}.pdf`, { type: 'application/pdf' });
 
-      // Open WhatsApp with complete details
-      const encodedText = encodeURIComponent(orderText);
-      window.open(`https://wa.me/918667784874?text=${encodedText}`, '_blank');
+        // Native Mobile Share API
+        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+          await navigator.share({
+            files: [pdfFile],
+            title: `${CONFIG.storeName} Order Bill`,
+            text: `Attached is my order bill from ${CONFIG.storeName}.`
+          });
+        } else {
+          // Desktop Browser Fallback
+          pdfWorker.save();
+          const fallbackMessage = encodeURIComponent(`Hello ${CONFIG.storeName}, I have placed an order and generated my bill PDF.\n\n*Grand Total: ₹${grandTotal.toFixed(2)}*\n\n(PDF downloaded to my device)`);
+          window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${fallbackMessage}`, '_blank');
+        }
+      } catch (e) {
+        console.error("PDF generation or sharing error:", e);
+        alert("Unable to open native file share. Opening WhatsApp fallback.");
+        const fallbackMessage = encodeURIComponent(`Hello ${CONFIG.storeName}, I have placed an order.\n\n*Grand Total: ₹${grandTotal.toFixed(2)}*`);
+        window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${fallbackMessage}`, '_blank');
+      }
     }
 
+    initConfig();
     renderTable();
   </script>
 </body>
