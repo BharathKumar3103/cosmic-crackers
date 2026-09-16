@@ -209,13 +209,18 @@
       background-color: #25d366;
       color: white;
       border: none;
-      padding: 0.9rem 1.4rem;
-      font-size: 1rem;
+      padding: 0.9rem 1.8rem;
+      font-size: 1.05rem;
       font-weight: bold;
       border-radius: 6px;
       cursor: pointer;
       text-decoration: none;
       -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .btn-order:hover {
+      background-color: #20ba5a;
     }
 
     @media (max-width: 768px) {
@@ -624,7 +629,7 @@
 
       orderText += `\n*Grand Total: ₹${grandTotal.toFixed(2)}*`;
 
-      // 1. Generate & Download PDF
+      // 1. Generate & Automatically Download PDF (Non-blank fix)
       const { jsPDF } = window.jspdf;
       if (jsPDF) {
         const doc = new jsPDF();
@@ -648,7 +653,7 @@
         doc.setFontSize(9);
         doc.setFont("helvetica", "normal");
         doc.text(`Date: ${new Date().toLocaleDateString()}`, 14, 42);
-        doc.text("Status: Order Summary", 150, 42);
+        doc.text("Status: Order Invoice", 150, 42);
 
         // AutoTable
         if (typeof doc.autoTable === "function") {
@@ -656,7 +661,7 @@
             startY: 48,
             head: [['S.No', 'Product Name', 'Unit', 'Actual', 'Disc. Price', 'Qty', 'Subtotal']],
             body: selectedItems,
-            headStyles: { fillStyle: 'F', fillColor: [33, 37, 41], textColor: [255, 255, 255], fontStyle: 'bold' },
+            headStyles: { fillColor: [33, 37, 41], textColor: [255, 255, 255], fontStyle: 'bold' },
             alternateRowStyles: { fillColor: [248, 249, 250] },
             styles: { fontSize: 8, cellPadding: 2.5 }
           });
@@ -682,24 +687,15 @@
         doc.setTextColor(100, 100, 100);
         doc.text("Thank you for choosing Cosmic Crackers! Happy Diwali!", 105, finalY + 34, { align: "center" });
 
-        // Device-optimized PDF delivery
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if (isIOS) {
-          const pdfWindow = window.open('', '_blank');
-          if (pdfWindow) {
-            pdfWindow.document.write("<p style='font-family:-apple-system; padding:20px; font-size:16px;'>Generating invoice, please wait...</p>");
-            pdfWindow.location.href = doc.output('datauristring');
-          }
-        } else {
-          doc.save("Cosmic_Crackers_Invoice.pdf");
-        }
+        // Trigger direct file save without blank windows
+        doc.save("Cosmic_Crackers_Invoice.pdf");
       }
 
       // 2. Open WhatsApp with order details
       const encodedText = encodeURIComponent(orderText);
       setTimeout(() => {
         window.open(`https://wa.me/918667784874?text=${encodedText}`, '_blank');
-      }, 500);
+      }, 400);
     }
 
     renderTable();
