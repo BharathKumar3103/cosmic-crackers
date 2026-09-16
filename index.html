@@ -2,9 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Cosmic Crackers - Diwali Price List 2026</title>
-<style>
+  
+  <!-- html2pdf Library for Client-Side PDF Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
     :root {
       --primary-color: #d90429;
       --secondary-color: #ef233c;
@@ -24,86 +28,99 @@
     body {
       background-color: var(--bg-color);
       color: var(--text-color);
-      padding-bottom: 120px;
+      padding-bottom: 110px;
     }
 
     header {
       background: linear-gradient(135deg, #1d3557, #457b9d);
       color: white;
       text-align: center;
-      padding: 1.5rem 0.8rem;
+      padding: 1rem 0.5rem;
     }
 
     header h1 {
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       color: var(--accent-color);
     }
 
     header p {
-      margin-top: 0.3rem;
-      font-size: 0.95rem;
+      margin-top: 0.2rem;
+      font-size: 0.85rem;
     }
 
     .badge {
       display: inline-block;
       background-color: var(--primary-color);
       color: white;
-      padding: 0.25rem 0.6rem;
-      border-radius: 20px;
-      font-size: 0.85rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
       font-weight: bold;
-      margin-top: 0.4rem;
+      margin-top: 0.3rem;
     }
 
     .container {
+      width: 100%;
       max-width: 1200px;
-      margin: 1rem auto;
-      padding: 0 0.5rem;
+      margin: 0.5rem auto;
+      padding: 0 4px;
     }
 
     .search-box {
       width: 100%;
-      padding: 0.7rem;
-      font-size: 0.95rem;
+      padding: 0.6rem;
+      font-size: 0.9rem;
       border: 2px solid var(--border-color);
-      border-radius: 8px;
-      margin-bottom: 1rem;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
       outline: none;
     }
 
     .table-container {
       width: 100%;
-      overflow-x: auto;
+      overflow-x: hidden; /* Prevents horizontal scrolling */
       background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border-radius: 6px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.08);
     }
 
     table {
       width: 100%;
+      table-layout: fixed; /* Fits table strictly to mobile screen width */
       border-collapse: collapse;
-      text-align: left;
-      font-size: 0.85rem;
+      text-align: center;
+      font-size: 0.75rem;
     }
 
     th, td {
-      padding: 8px 6px;
+      padding: 6px 2px;
       border-bottom: 1px solid var(--border-color);
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
 
     th {
       background-color: #212529;
       color: white;
       font-weight: 600;
-      font-size: 0.8rem;
-      white-space: nowrap;
+      font-size: 0.72rem;
     }
+
+    /* Column Widths optimized for Mobile */
+    .col-sno { width: 8%; }
+    .col-name { width: 34%; text-align: left; }
+    .col-unit { width: 11%; }
+    .col-act { width: 15%; }
+    .col-disc { width: 15%; }
+    .col-qty { width: 17%; }
 
     .category-header {
       background-color: #e9ecef;
       font-weight: bold;
       color: #1d3557;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
+      text-align: left;
+      padding-left: 8px;
     }
 
     .actual-price {
@@ -112,29 +129,47 @@
       text-decoration-color: #d90429 !important;
       text-decoration-thickness: 2px !important;
       font-weight: 700;
-      font-size: 0.85rem;
-      white-space: nowrap;
+      font-size: 0.72rem;
     }
 
     .discount-price {
       color: var(--primary-color);
       font-weight: bold;
-      white-space: nowrap;
+      font-size: 0.75rem;
     }
 
-    .qty-input {
-      width: 50px;
-      padding: 4px;
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      text-align: center;
-      font-size: 0.9rem;
+    /* Stepper + / - Controls */
+    .qty-stepper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
     }
 
-    .subtotal {
+    .btn-qty {
+      width: 22px;
+      height: 22px;
+      background-color: #e9ecef;
+      border: 1px solid #ced4da;
+      border-radius: 3px;
       font-weight: bold;
-      color: #2b2d42;
-      white-space: nowrap;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+
+    .btn-qty:active {
+      background-color: #adb5bd;
+    }
+
+    .qty-count {
+      width: 18px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 0.8rem;
     }
 
     /* Fixed Bottom Order Bar */
@@ -145,17 +180,17 @@
       right: 0;
       background-color: #212529;
       color: white;
-      padding: 0.8rem 1rem;
+      padding: 0.6rem;
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
+      gap: 0.4rem;
       box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
       z-index: 1000;
     }
 
     .cart-info {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
       align-items: center;
       width: 100%;
     }
@@ -167,12 +202,12 @@
     }
 
     .cart-info span.label {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #adb5bd;
     }
 
     .cart-info span.value {
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       font-weight: bold;
       color: var(--accent-color);
     }
@@ -181,8 +216,8 @@
       background-color: #25d366;
       color: white;
       border: none;
-      padding: 0.7rem;
-      font-size: 1rem;
+      padding: 0.6rem;
+      font-size: 0.95rem;
       font-weight: bold;
       border-radius: 6px;
       cursor: pointer;
@@ -190,17 +225,71 @@
       text-align: center;
     }
 
-    /* Desktop Adjustments */
+    /* Hidden Invoice Template for PDF Generation */
+    #invoice-template {
+      display: none;
+      padding: 20px;
+      background: #fff;
+      color: #000;
+      font-family: Arial, sans-serif;
+    }
+
+    #invoice-template h2 {
+      text-align: center;
+      color: #d90429;
+      margin-bottom: 5px;
+    }
+
+    #invoice-template p {
+      text-align: center;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    #invoice-template table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+
+    #invoice-template th, #invoice-template td {
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      font-size: 0.85rem;
+    }
+
+    #invoice-template th {
+      background-color: #f1f1f1;
+    }
+
+    .invoice-footer {
+      text-align: center;
+      margin-top: 25px;
+      padding-top: 15px;
+      border-top: 2px dashed #d90429;
+    }
+
+    .invoice-footer h3 {
+      color: #1d3557;
+      font-size: 1.2rem;
+    }
+
+    /* Desktop View Adjustments */
     @media (min-width: 769px) {
       table {
-        font-size: 1rem;
+        font-size: 0.95rem;
       }
       th, td {
-        padding: 12px 16px;
+        padding: 10px 12px;
       }
-      .qty-input {
-        width: 70px;
-        padding: 6px;
+      .btn-qty {
+        width: 28px;
+        height: 28px;
+        font-size: 1rem;
+      }
+      .qty-count {
+        width: 30px;
+        font-size: 0.95rem;
       }
       .cart-bar {
         flex-direction: row;
@@ -224,23 +313,22 @@
     <h1>COSMIC CRACKERS</h1>
     <p>Sivakasi Wholesale Price List 2026</p>
     <div class="badge">FLAT 80% DISCOUNT APPLIED</div>
-    <p style="margin-top: 10px; font-size: 0.9rem;">Call / WhatsApp: 8667784874</p>
+    <p style="margin-top: 6px; font-size: 0.8rem;">Call / WhatsApp: 8667784874</p>
   </header>
 
   <div class="container">
-    <input type="text" id="searchInput" class="search-box" placeholder="Search products (e.g., Lakshmi, Sparklers, Bomb)..." onkeyup="filterProducts()" />
+    <input type="text" id="searchInput" class="search-box" placeholder="Search products..." onkeyup="filterProducts()" />
 
     <div class="table-container">
       <table id="priceTable">
         <thead>
           <tr>
-            <th>S.No</th>
-            <th>Product Name</th>
-            <th>Unit</th>
-            <th>Actual Price</th>
-            <th>80% Disc. Price</th>
-            <th>Quantity</th>
-            <th>Subtotal</th>
+            <th class="col-sno">#</th>
+            <th class="col-name">Product Name</th>
+            <th class="col-unit">Unit</th>
+            <th class="col-act">Actual</th>
+            <th class="col-disc">Price</th>
+            <th class="col-qty">Qty</th>
           </tr>
         </thead>
         <tbody id="tableBody">
@@ -254,11 +342,11 @@
   <div class="cart-bar">
     <div class="cart-info">
       <div>
-        <span class="label">Total Items</span>
+        <span class="label">Items</span>
         <span class="value" id="totalItems">0</span>
       </div>
       <div>
-        <span class="label">Total Savings</span>
+        <span class="label">Savings</span>
         <span class="value" id="totalSavings">₹0.00</span>
       </div>
       <div>
@@ -266,7 +354,37 @@
         <span class="value" id="grandTotal">₹0.00</span>
       </div>
     </div>
-    <button class="btn-order" onclick="sendWhatsAppOrder()">Order via WhatsApp</button>
+    <button class="btn-order" onclick="processOrderAndPDF()">Generate Bill PDF & Order</button>
+  </div>
+
+  <!-- Hidden Container for PDF Bill -->
+  <div id="invoice-template">
+    <h2>COSMIC CRACKERS</h2>
+    <p>Sivakasi Wholesale Crackers | Contact: 8667784874</p>
+    <hr style="margin-bottom: 15px;" />
+    <table>
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>Product Name</th>
+          <th>Unit</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody id="invoiceTableBody">
+        <!-- Dynamically injected -->
+      </tbody>
+    </table>
+    <div style="text-align: right; margin-bottom: 15px; font-size: 0.95rem;">
+      <p><strong>Total Savings: <span id="pdfSavings">₹0.00</span></strong></p>
+      <p style="font-size: 1.1rem; color: #d90429;"><strong>Grand Total: <span id="pdfGrandTotal">₹0.00</span></strong></p>
+    </div>
+    <div class="invoice-footer">
+      <h3>Thank you & Happy Diwali! 🪔✨</h3>
+      <p style="margin-top: 5px; font-size: 0.85rem; color: #555;">Cosmic Crackers - Light Up Your Celebrations</p>
+    </div>
   </div>
 
   <script>
@@ -467,38 +585,38 @@
         if (item.category) {
           const catRow = document.createElement('tr');
           catRow.className = 'category-header';
-          catRow.innerHTML = `<td colspan="7">${item.category}</td>`;
+          catRow.innerHTML = `<td colspan="6">${item.category}</td>`;
           tbody.appendChild(catRow);
         } else {
           const row = document.createElement('tr');
           row.setAttribute('data-name', item.name.toLowerCase());
           row.innerHTML = `
-            <td>${item.id}</td>
-            <td>${item.name}</td>
-            <td>${item.unit}</td>
-            <td class="actual-price">₹${item.actual.toFixed(2)}</td>
-            <td class="discount-price">₹${item.disc.toFixed(2)}</td>
-            <td>
-              <input type="number" min="0" value="${quantities[item.id] || 0}" class="qty-input" onchange="updateQty(${item.id}, this.value)" oninput="updateQty(${item.id}, this.value)">
+            <td class="col-sno">${item.id}</td>
+            <td class="col-name">${item.name}</td>
+            <td class="col-unit">${item.unit}</td>
+            <td class="col-act actual-price">₹${item.actual}</td>
+            <td class="col-disc discount-price">₹${item.disc}</td>
+            <td class="col-qty">
+              <div class="qty-stepper">
+                <button type="button" class="btn-qty" onclick="changeQty(${item.id}, -1)">-</button>
+                <span class="qty-count" id="qty-${item.id}">${quantities[item.id] || 0}</span>
+                <button type="button" class="btn-qty" onclick="changeQty(${item.id}, 1)">+</button>
+              </div>
             </td>
-            <td class="subtotal" id="subtotal-${item.id}">₹0.00</td>
           `;
           tbody.appendChild(row);
         }
       });
     }
 
-    function updateQty(id, qty) {
-      const parsedQty = parseInt(qty) || 0;
-      quantities[id] = parsedQty < 0 ? 0 : parsedQty;
-      
-      const item = rawData.find(i => i.id === id);
-      if (item) {
-        const subtotal = quantities[id] * item.disc;
-        const subtotalElem = document.getElementById(`subtotal-${id}`);
-        if (subtotalElem) {
-          subtotalElem.innerText = `₹${subtotal.toFixed(2)}`;
-        }
+    function changeQty(id, change) {
+      const current = quantities[id] || 0;
+      const updated = current + change;
+      quantities[id] = updated < 0 ? 0 : updated;
+
+      const qtyElem = document.getElementById(`qty-${id}`);
+      if (qtyElem) {
+        qtyElem.innerText = quantities[id];
       }
       calculateTotals();
     }
@@ -542,17 +660,33 @@
       });
     }
 
-    function sendWhatsAppOrder() {
-      let orderText = "Hello Cosmic Crackers, I would like to place an order:\n\n";
+    async function processOrderAndPDF() {
       let hasItems = false;
       let grandTotal = 0;
+      let totalActual = 0;
+      let pdfTableHTML = "";
+      let orderText = "Hello Cosmic Crackers, I have placed an order and generated my bill PDF.\n\n*Order Summary:*\n";
 
+      let count = 1;
       rawData.forEach(item => {
         if (item.id && quantities[item.id] > 0) {
           hasItems = true;
           const q = quantities[item.id];
           const subtotal = q * item.disc;
           grandTotal += subtotal;
+          totalActual += q * item.actual;
+
+          pdfTableHTML += `
+            <tr>
+              <td>${count++}</td>
+              <td>${item.name}</td>
+              <td>${item.unit}</td>
+              <td>₹${item.disc.toFixed(2)}</td>
+              <td>${q}</td>
+              <td>₹${subtotal.toFixed(2)}</td>
+            </tr>
+          `;
+
           orderText += `• ${item.name} (${item.unit}) x ${q} = ₹${subtotal.toFixed(2)}\n`;
         }
       });
@@ -562,12 +696,40 @@
         return;
       }
 
-      orderText += `\n*Grand Total: ₹${grandTotal.toFixed(2)}*`;
+      const totalSavings = totalActual - grandTotal;
+      orderText += `\n*Grand Total: ₹${grandTotal.toFixed(2)}*\n\n*(PDF Bill has been downloaded to my device and attached here)*`;
+
+      // Populate hidden PDF template
+      document.getElementById('invoiceTableBody').innerHTML = pdfTableHTML;
+      document.getElementById('pdfSavings').innerText = `₹${totalSavings.toFixed(2)}`;
+      document.getElementById('pdfGrandTotal').innerText = `₹${grandTotal.toFixed(2)}`;
+
+      // Show element temporarily for rendering
+      const element = document.getElementById('invoice-template');
+      element.style.display = 'block';
+
+      const opt = {
+        margin:       0.5,
+        filename:     `Cosmic_Crackers_Bill_${Date.now()}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+
+      try {
+        await html2pdf().set(opt).from(element).save();
+      } catch (e) {
+        console.error("PDF generation error:", e);
+      } finally {
+        element.style.display = 'none';
+      }
+
+      // Redirect to WhatsApp with order pre-filled
       const encodedText = encodeURIComponent(orderText);
       window.open(`https://wa.me/918667784874?text=${encodedText}`, '_blank');
     }
 
-    // Initialize
+    // Initialize table
     renderTable();
   </script>
 </body>
