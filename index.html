@@ -294,8 +294,8 @@
     <button class="btn-order" onclick="processOrderAndPDF()">Download PDF & Send Order</button>
   </div>
 
-  <!-- Fixed Off-Screen PDF Template Container (Mobile-Friendly) -->
-  <div id="invoice-template" style="position: fixed; top: 0; left: 0; width: 750px; background: #ffffff; color: #000000; padding: 25px; font-family: Arial, sans-serif; visibility: hidden; z-index: -1000;">
+  <!-- PDF Template Container (Hidden by default, shown temporarily during generation) -->
+  <div id="invoice-template" style="display: none; width: 750px; background: #ffffff; color: #000000; padding: 25px; font-family: Arial, sans-serif;">
     <h2 id="pdfHeaderTitle" style="text-align: center; color: #d90429; margin-bottom: 5px;">COSMIC CRACKERS</h2>
     <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px;">Sivakasi Wholesale Crackers | Contact: <span id="pdfHeaderPhone">8667784874</span></p>
     <hr style="margin-bottom: 15px; border: 0; border-top: 1px solid #ccc;" />
@@ -670,13 +670,14 @@
       orderText += `\n*Grand Total: ₹${grandTotal.toFixed(2)}*\n\n`;
       orderText += `(PDF Bill downloaded and attached)`;
 
-      // Inject values into hidden PDF template
+      // Inject values into PDF template
       document.getElementById('invoiceTableBody').innerHTML = pdfTableHTML;
       document.getElementById('pdfTotalAmount').innerText = `₹${totalActual.toFixed(2)}`;
       document.getElementById('pdfSavings').innerText = `₹${totalSavings.toFixed(2)}`;
       document.getElementById('pdfGrandTotal').innerText = `₹${grandTotal.toFixed(2)}`;
 
       const element = document.getElementById('invoice-template');
+      element.style.display = 'block'; // Temporarily show template so browser renders it for capture
 
       const opt = {
         margin:       0.3,
@@ -687,17 +688,20 @@
       };
 
       try {
-        // Small delay to ensure mobile layout engines register the DOM text injection
+        // Small delay to ensure mobile layout engines register the DOM text injection and display change
         await new Promise(resolve => setTimeout(resolve, 150));
 
         // 1. Download PDF to customer device
         await html2pdf().set(opt).from(element).save();
+
+        element.style.display = 'none'; // Hide template again after generation
 
         // 2. Open WhatsApp with formatted order message
         const encodedText = encodeURIComponent(orderText);
         window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodedText}`, '_blank');
       } catch (e) {
         console.error("PDF generation error:", e);
+        element.style.display = 'none'; // Ensure hidden even on error
         alert("An error occurred while generating the PDF. Opening WhatsApp fallback.");
         const encodedText = encodeURIComponent(orderText);
         window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodedText}`, '_blank');
