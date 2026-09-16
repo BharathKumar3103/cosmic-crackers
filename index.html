@@ -29,13 +29,13 @@
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 100%;
+      width: 100%;
       margin: 0 auto;
       background: #fff;
-      padding: 12px;
+      padding: 10px;
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      overflow-x: hidden;
     }
 
     h1 {
@@ -59,23 +59,24 @@
 
     .search-bar input {
       width: 100%;
-      max-width: 400px;
-      padding: 8px 12px;
+      max-width: 100%;
+      padding: 8px;
       border: 1px solid var(--border-color);
       border-radius: 4px;
       font-size: 14px;
     }
 
+    /* Prevent table wrapper from causing horizontal page overflow */
     .table-responsive {
       width: 100%;
       overflow-x: hidden;
-      margin-bottom: 15px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      table-layout: fixed;
+      margin-bottom: 15px;
+      table-layout: fixed; /* Ensures cells wrap properly and fit within boundaries */
     }
 
     th, td {
@@ -86,19 +87,19 @@
       word-wrap: break-word;
     }
 
-    /* Adjusted column widths to fit the screen without horizontal scrolling */
-    th:nth-child(1), td:nth-child(1) { width: 8%; text-align: center; }  /* S.No */
-    th:nth-child(2), td:nth-child(2) { width: 33%; } /* Product Name */
-    th:nth-child(3), td:nth-child(3) { width: 12%; } /* Unit */
-    th:nth-child(4), td:nth-child(4) { width: 13%; } /* Disc. Price */
-    th:nth-child(5), td:nth-child(5) { width: 18%; } /* Quantity */
-    th:nth-child(6), td:nth-child(6) { width: 16%; } /* Subtotal */
-
     th {
       background-color: var(--primary-color);
       color: white;
-      font-size: 11px;
     }
+
+    /* Allocate precise column width ratios */
+    th:nth-child(1), td:nth-child(1) { width: 8%; }  /* S.No */
+    th:nth-child(2), td:nth-child(2) { width: 27%; } /* Product Name */
+    th:nth-child(3), td:nth-child(3) { width: 12%; } /* Unit */
+    th:nth-child(4), td:nth-child(4) { width: 12%; } /* Actual */
+    th:nth-child(5), td:nth-child(5) { width: 13%; } /* Disc. Price */
+    th:nth-child(6), td:nth-child(6) { width: 15%; } /* Quantity */
+    th:nth-child(7), td:nth-child(7) { width: 13%; } /* Subtotal */
 
     .category-header {
       background-color: #e2e8f0;
@@ -111,8 +112,8 @@
     .qty-control {
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: 2px;
+      justify-content: center;
     }
 
     .btn-qty {
@@ -122,11 +123,7 @@
       cursor: pointer;
       font-weight: bold;
       border-radius: 3px;
-      font-size: 11px;
-    }
-
-    .btn-qty:hover {
-      background-color: #cbd5e1;
+      font-size: 10px;
     }
 
     .qty-input {
@@ -144,13 +141,14 @@
       border-radius: 6px;
       margin-bottom: 15px;
       display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
+      flex-direction: column;
+      gap: 8px;
     }
 
     .summary-item {
       font-size: 13px;
+      display: flex;
+      justify-content: space-between;
     }
 
     .summary-item span {
@@ -181,15 +179,28 @@
       font-weight: bold;
     }
 
-    @media (min-width: 768px) {
-      body { padding: 20px; }
-      .container { padding: 20px; }
-      h1 { font-size: 28px; }
+    @media (min-width: 600px) {
+      body {
+        padding: 20px;
+      }
+      .container {
+        max-width: 900px;
+        padding: 20px;
+      }
+      h1 { font-size: 26px; }
       .subtitle { font-size: 14px; }
-      th, td { padding: 10px; font-size: 14px; }
-      .qty-input { width: 45px; font-size: 14px; }
-      .btn-qty { padding: 4px 8px; font-size: 14px; }
-      .summary-item { font-size: 15px; }
+      th, td { padding: 8px; font-size: 13px; }
+      .qty-control { gap: 4px; }
+      .btn-qty { padding: 4px 8px; font-size: 12px; }
+      .qty-input { width: 40px; font-size: 13px; }
+      .summary-box {
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 15px;
+        padding: 15px;
+      }
+      .summary-item { display: block; font-size: 15px; }
     }
   </style>
 </head>
@@ -197,7 +208,7 @@
 
   <div class="container">
     <h1>Cosmic Crackers</h1>
-    <div class="subtitle">Sivakasi Wholesale Price List - Interactive Order & Invoice Page</div>
+    <div class="subtitle">Sivakasi Wholesale Price List - Interactive Order & Invoice</div>
 
     <div class="search-bar">
       <input type="text" id="searchInput" placeholder="Search products..." oninput="filterProducts()">
@@ -210,6 +221,7 @@
             <th>S.No</th>
             <th>Product Name</th>
             <th>Unit</th>
+            <th>Actual</th>
             <th>Disc. Price</th>
             <th>Qty</th>
             <th>Subtotal</th>
@@ -223,7 +235,9 @@
 
     <div class="summary-box">
       <div class="summary-item">Total Items: <span id="totalItems">0</span></div>
-      <div class="summary-item">Grand Total: <span id="grandTotal" style="color: var(--accent-color);">₹0.00</span></div>
+      <div class="summary-item">Original Total: <span id="originalTotal">₹0.00</span></div>
+      <div class="summary-item">Total Savings: <span id="totalSavings">₹0.00</span></div>
+      <div class="summary-item" style="font-size: 15px;">Grand Total: <span id="grandTotal" style="color: var(--accent-color);">₹0.00</span></div>
     </div>
 
     <button class="order-btn" onclick="generatePDFAndOrderWhatsApp()">Generate PDF & Order via WhatsApp</button>
@@ -427,7 +441,7 @@
         if (item.category) {
           const catRow = document.createElement('tr');
           catRow.className = 'category-header';
-          catRow.innerHTML = `<td colspan="6">${item.category}</td>`;
+          catRow.innerHTML = `<td colspan="7">${item.category}</td>`;
           tbody.appendChild(catRow);
         } else {
           const row = document.createElement('tr');
@@ -436,7 +450,8 @@
             <td>${item.id}</td>
             <td>${item.name}</td>
             <td>${item.unit}</td>
-            <td class="discount-price">₹${item.disc.toFixed(0)}</td>
+            <td>₹${item.actual.toFixed(2)}</td>
+            <td class="discount-price">₹${item.disc.toFixed(2)}</td>
             <td>
               <div class="qty-control">
                 <button class="btn-qty" onclick="changeQty(${item.id}, -1)">-</button>
@@ -444,7 +459,7 @@
                 <button class="btn-qty" onclick="changeQty(${item.id}, 1)">+</button>
               </div>
             </td>
-            <td class="subtotal" id="subtotal-${item.id}">₹0</td>
+            <td class="subtotal" id="subtotal-${item.id}">₹0.00</td>
           `;
           tbody.appendChild(row);
         }
@@ -470,7 +485,7 @@
         const subtotal = quantities[id] * item.disc;
         const subtotalElem = document.getElementById(`subtotal-${id}`);
         if (subtotalElem) {
-          subtotalElem.innerText = `₹${subtotal.toFixed(0)}`;
+          subtotalElem.innerText = `₹${subtotal.toFixed(2)}`;
         }
       }
       calculateTotals();
@@ -479,17 +494,23 @@
     function calculateTotals() {
       let totalQty = 0;
       let grandTotal = 0;
+      let totalActual = 0;
 
       rawData.forEach(item => {
         if (item.id && quantities[item.id]) {
           const q = quantities[item.id];
           totalQty += q;
           grandTotal += q * item.disc;
+          totalActual += q * item.actual;
         }
       });
 
+      const totalSavings = totalActual - grandTotal;
+
       document.getElementById('totalItems').innerText = totalQty;
+      document.getElementById('originalTotal').innerText = `₹${totalActual.toFixed(2)}`;
       document.getElementById('grandTotal').innerText = `₹${grandTotal.toFixed(2)}`;
+      document.getElementById('totalSavings').innerText = `₹${totalSavings.toFixed(2)}`;
     }
 
     function filterProducts() {
@@ -514,6 +535,7 @@
       let hasItems = false;
       const selectedItems = [];
       let grandTotal = 0;
+      let totalActual = 0;
 
       let orderText = "Hello Cosmic Crackers, I have placed an order and generated my bill PDF.\n\nOrder Summary:\n";
 
@@ -523,6 +545,7 @@
           const q = quantities[item.id];
           const subtotal = q * item.disc;
           grandTotal += subtotal;
+          totalActual += q * item.actual;
 
           orderText += `• ${item.name} (${item.unit}) x ${q} = ₹${subtotal.toFixed(2)}\n`;
 
@@ -530,6 +553,7 @@
             item.id.toString(),
             item.name,
             item.unit,
+            `Rs. ${item.actual.toFixed(2)}`,
             `Rs. ${item.disc.toFixed(2)}`,
             q.toString(),
             `Rs. ${subtotal.toFixed(2)}`
@@ -542,59 +566,80 @@
         return;
       }
 
+      const totalSavings = totalActual - grandTotal;
+
+      orderText += `\nTotal Amount: ₹${totalActual.toFixed(2)}`;
+      orderText += `\nTotal Savings: ₹${totalSavings.toFixed(2)}`;
       orderText += `\nGrand Total: ₹${grandTotal.toFixed(2)}`;
       orderText += `\n\n(PDF Bill generated)`;
 
-      // 1. Generate PDF
+      // 1. Generate PDF with constrained widths to fit exact A4 portrait dimensions cleanly
       const { jsPDF } = window.jspdf;
       if (jsPDF) {
-        const doc = new jsPDF();
+        const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
 
-        // Header Banner
+        // Header Banner (A4 Width = 210mm)
         doc.setFillColor(29, 53, 87);
-        doc.rect(0, 0, 210, 35, 'F');
+        doc.rect(0, 0, 210, 30, 'F');
 
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(18);
+        doc.setFontSize(16);
         doc.setTextColor(255, 183, 3);
-        doc.text("COSMIC CRACKERS", 105, 14, { align: "center" });
+        doc.text("COSMIC CRACKERS", 105, 12, { align: "center" });
 
-        doc.setFontSize(9);
+        doc.setFontSize(8);
         doc.setTextColor(255, 255, 255);
-        doc.text("Sivakasi Wholesale Price List - Estimate Invoice", 105, 22, { align: "center" });
-        doc.text("Call / WhatsApp: +91 8667784874", 105, 28, { align: "center" });
+        doc.text("Sivakasi Wholesale Price List - Estimate Invoice", 105, 19, { align: "center" });
+        doc.text("Call / WhatsApp: +91 8667784874", 105, 25, { align: "center" });
 
         // Invoice Metadata
         doc.setTextColor(0, 0, 0);
-        doc.setFontSize(9);
+        doc.setFontSize(8);
         doc.setFont("helvetica", "normal");
-        doc.text(`Date: ${new Date().toLocaleDateString()}`, 14, 42);
-        doc.text("Status: Order Invoice", 150, 42);
+        doc.text(`Date: ${new Date().toLocaleDateString()}`, 10, 36);
+        doc.text("Status: Order Invoice", 160, 36);
 
-        // Table generation
+        // Table generation with exact column percentage mapping to prevent text wrapping outside page bounds
         if (typeof doc.autoTable === "function") {
           doc.autoTable({
-            startY: 48,
-            head: [['S.No', 'Product Name', 'Unit', 'Disc. Price', 'Qty', 'Subtotal']],
+            startY: 40,
+            margin: { left: 10, right: 10 },
+            tableWidth: 'auto',
+            head: [['S.No', 'Product Name', 'Unit', 'Actual', 'Disc. Price', 'Qty', 'Subtotal']],
             body: selectedItems,
-            headStyles: { fillColor: [33, 37, 41], textColor: [255, 255, 255], fontStyle: 'bold' },
+            columnStyles: {
+              0: { cellWidth: 12 },
+              1: { cellWidth: 62 },
+              2: { cellWidth: 22 },
+              3: { cellWidth: 24 },
+              4: { cellWidth: 26 },
+              5: { cellWidth: 16 },
+              6: { cellWidth: 28 }
+            },
+            headStyles: { fillColor: [33, 37, 41], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 8 },
             alternateRowStyles: { fillColor: [248, 249, 250] },
-            styles: { fontSize: 8, cellPadding: 2.5 }
+            styles: { fontSize: 7, cellPadding: 1.5, overflow: 'linebreak' }
           });
         }
 
-        const finalY = (doc.lastAutoTable && doc.lastAutoTable.finalY) ? doc.lastAutoTable.finalY : 50;
+        const finalY = (doc.lastAutoTable && doc.lastAutoTable.finalY) ? doc.lastAutoTable.finalY : 45;
 
         // Totals Section
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Total Amount: Rs. ${totalActual.toFixed(2)}`, 10, finalY + 8);
+        doc.text(`Total Savings: Rs. ${totalSavings.toFixed(2)}`, 10, finalY + 13);
+
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(11);
+        doc.setFontSize(10);
         doc.setTextColor(217, 4, 41);
-        doc.text(`Grand Total: Rs. ${grandTotal.toFixed(2)}`, 14, finalY + 16);
+        doc.text(`Grand Total: Rs. ${grandTotal.toFixed(2)}`, 10, finalY + 20);
 
         doc.setFont("helvetica", "italic");
-        doc.setFontSize(8);
+        doc.setFontSize(7);
         doc.setTextColor(100, 100, 100);
-        doc.text("Thank you for choosing Cosmic Crackers! Happy Diwali!", 105, finalY + 26, { align: "center" });
+        doc.text("Thank you for choosing Cosmic Crackers! Happy Diwali!", 105, finalY + 28, { align: "center" });
 
         // Safe mobile vs desktop output handling
         const pdfBlob = doc.output('blob');
@@ -608,7 +653,7 @@
         }
       }
 
-      // 2. Open WhatsApp after a short delay
+      // 2. Open WhatsApp after a short delay so the mobile browser handles the PDF view first
       setTimeout(() => {
         const encodedText = encodeURIComponent(orderText);
         const whatsappUrl = `https://wa.me/918667784874?text=${encodedText}`;
