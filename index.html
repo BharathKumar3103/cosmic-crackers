@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cosmic Crackers - Diwali Price List 2026</title>
+  
+  <!-- jsPDF & AutoTable CDNs for Client-Side PDF Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
   <style>
     :root {
       --primary-color: #d90429;
@@ -24,7 +29,7 @@
     body {
       background-color: var(--bg-color);
       color: var(--text-color);
-      padding-bottom: 100px;
+      padding-bottom: 120px;
     }
 
     header {
@@ -121,13 +126,33 @@
       font-weight: bold;
     }
 
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-qty {
+      background-color: #e9ecef;
+      border: 1px solid var(--border-color);
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-qty:hover {
+      background-color: #ced4da;
+    }
+
     .qty-input {
-      width: 70px;
-      padding: 6px;
+      width: 50px;
+      padding: 4px;
       border: 1px solid var(--border-color);
       border-radius: 4px;
       text-align: center;
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
 
     .subtotal {
@@ -173,11 +198,16 @@
       color: var(--accent-color);
     }
 
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
     .btn-order {
       background-color: #25d366;
       color: white;
       border: none;
-      padding: 0.8rem 1.5rem;
+      padding: 0.8rem 1.2rem;
       font-size: 1rem;
       font-weight: bold;
       border-radius: 6px;
@@ -188,6 +218,22 @@
 
     .btn-order:hover {
       background-color: #128c7e;
+    }
+
+    .btn-pdf {
+      background-color: #0284c7;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn-pdf:hover {
+      background-color: #0369a1;
     }
 
     @media (max-width: 768px) {
@@ -201,8 +247,11 @@
         width: 100%;
         justify-content: space-between;
       }
-      .btn-order {
+      .action-buttons {
         width: 100%;
+      }
+      .btn-order, .btn-pdf {
+        flex: 1;
         text-align: center;
       }
     }
@@ -240,12 +289,16 @@
     </div>
   </div>
 
-  <!-- Cart Footer -->
+  <!-- Cart Footer Bar -->
   <div class="cart-bar">
     <div class="cart-info">
       <div>
         <span class="label">Total Items</span>
         <span class="value" id="totalItems">0</span>
+      </div>
+      <div>
+        <span class="label">Original Total</span>
+        <span class="value" id="originalTotal" style="text-decoration: line-through; color: #8d99ae;">₹0.00</span>
       </div>
       <div>
         <span class="label">Total Savings</span>
@@ -256,7 +309,10 @@
         <span class="value" id="grandTotal">₹0.00</span>
       </div>
     </div>
-    <button class="btn-order" onclick="sendWhatsAppOrder()">Order via WhatsApp</button>
+    <div class="action-buttons">
+      <button class="btn-pdf" onclick="generatePDFBill()">Download PDF Bill</button>
+      <button class="btn-order" onclick="sendWhatsAppOrder()">Order via WhatsApp</button>
+    </div>
   </div>
 
   <script>
@@ -469,13 +525,27 @@
             <td class="actual-price">₹${item.actual.toFixed(2)}</td>
             <td class="discount-price">₹${item.disc.toFixed(2)}</td>
             <td>
-              <input type="number" min="0" value="${quantities[item.id] || 0}" class="qty-input" onchange="updateQty(${item.id}, this.value)" oninput="updateQty(${item.id}, this.value)">
+              <div class="qty-control">
+                <button class="btn-qty" onclick="changeQty(${item.id}, -1)">-</button>
+                <input type="number" id="qty-input-${item.id}" min="0" value="${quantities[item.id] || 0}" class="qty-input" onchange="updateQty(${item.id}, this.value)" oninput="updateQty(${item.id}, this.value)">
+                <button class="btn-qty" onclick="changeQty(${item.id}, 1)">+</button>
+              </div>
             </td>
             <td class="subtotal" id="subtotal-${item.id}">₹0.00</td>
           `;
           tbody.appendChild(row);
         }
       });
+    }
+
+    function changeQty(id, delta) {
+      const currentQty = quantities[id] || 0;
+      const newQty = Math.max(0, currentQty + delta);
+      const inputElem = document.getElementById(`qty-input-${id}`);
+      if (inputElem) {
+        inputElem.value = newQty;
+      }
+      updateQty(id, newQty);
     }
 
     function updateQty(id, qty) {
@@ -510,6 +580,7 @@
       const totalSavings = totalActual - grandTotal;
 
       document.getElementById('totalItems').innerText = totalQty;
+      document.getElementById('originalTotal').innerText = `₹${totalActual.toFixed(2)}`;
       document.getElementById('grandTotal').innerText = `₹${grandTotal.toFixed(2)}`;
       document.getElementById('totalSavings').innerText = `₹${totalSavings.toFixed(2)}`;
     }
@@ -555,6 +626,94 @@
       orderText += `\n*Grand Total: ₹${grandTotal.toFixed(2)}*`;
       const encodedText = encodeURIComponent(orderText);
       window.open(`https://wa.me/918667784874?text=${encodedText}`, '_blank');
+    }
+
+    function generatePDFBill() {
+      let hasItems = false;
+      const selectedItems = [];
+      let grandTotal = 0;
+      let totalActual = 0;
+
+      rawData.forEach(item => {
+        if (item.id && quantities[item.id] > 0) {
+          hasItems = true;
+          const q = quantities[item.id];
+          const subtotal = q * item.disc;
+          grandTotal += subtotal;
+          totalActual += q * item.actual;
+          selectedItems.push([
+            item.id,
+            item.name,
+            item.unit,
+            `Rs. ${item.actual.toFixed(2)}`,
+            `Rs. ${item.disc.toFixed(2)}`,
+            q,
+            `Rs. ${subtotal.toFixed(2)}`
+          ]);
+        }
+      });
+
+      if (!hasItems) {
+        alert("Please select at least one item to generate a PDF bill.");
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Header Banner
+      doc.setFillColor(29, 53, 87);
+      doc.rect(0, 0, 210, 35, 'F');
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(20);
+      doc.setTextColor(255, 183, 3);
+      doc.text("COSMIC CRACKERS", 105, 15, { align: "center" });
+
+      doc.setFontSize(10);
+      doc.setTextColor(255, 255, 255);
+      doc.text("Sivakasi Wholesale Price List - Estimate Invoice", 105, 22, { align: "center" });
+      doc.text("Call / WhatsApp: +91 8667784874", 105, 28, { align: "center" });
+
+      // Invoice Details
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Date: ${new Date().toLocaleDateString()}`, 14, 42);
+      doc.text("Status: Order Summary", 150, 42);
+
+      // AutoTable
+      doc.autoTable({
+        startY: 48,
+        head: [['S.No', 'Product Name', 'Unit', 'Actual', 'Disc. Price', 'Qty', 'Subtotal']],
+        body: selectedItems,
+        headStyles: { fillStyle: 'F', fillColor: [33, 37, 41], textColor: [255, 255, 255], fontStyle: 'bold' },
+        alternateRowStyles: { fillColor: [248, 249, 250] },
+        styles: { fontSize: 9, cellPadding: 3 }
+      });
+
+      const finalY = doc.lastAutoTable.finalY || 50;
+
+      // Summary Breakdown
+      const totalSavings = totalActual - grandTotal;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      doc.text(`Original Total: Rs. ${totalActual.toFixed(2)}`, 14, finalY + 8);
+      doc.text(`Total Savings: Rs. ${totalSavings.toFixed(2)}`, 14, finalY + 14);
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(12);
+      doc.setTextColor(217, 4, 41);
+      doc.text(`Grand Total: Rs. ${grandTotal.toFixed(2)}`, 14, finalY + 22);
+
+      // Footer Note
+      doc.setFont("helvetica", "italic");
+      doc.setFontSize(9);
+      doc.setTextColor(100, 100, 100);
+      doc.text("Thank you for choosing Cosmic Crackers! Happy Diwali!", 105, finalY + 32, { align: "center" });
+
+      // Save PDF
+      doc.save("Cosmic_Crackers_Invoice.pdf");
     }
 
     // Initialize
