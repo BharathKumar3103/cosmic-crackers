@@ -294,34 +294,34 @@
     <button class="btn-order" onclick="processOrderAndPDF()">Download PDF & Send Order</button>
   </div>
 
-  <!-- PDF Template Container (Hidden by default, shown temporarily during generation) -->
-  <div id="invoice-template" style="display: none; width: 600px; background: #ffffff; color: #000000; padding: 25px; font-family: Arial, sans-serif;">
-    <h2 id="pdfHeaderTitle" style="text-align: center; color: #d90429; margin-bottom: 5px;">COSMIC CRACKERS</h2>
-    <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px;">Sivakasi Wholesale Crackers | Contact: <span id="pdfHeaderPhone">8667784874</span></p>
-    <hr style="margin-bottom: 15px; border: 0; border-top: 1px solid #ccc;" />
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+  <!-- PDF Template Container (Optimized for dense/large orders) -->
+  <div id="invoice-template" style="display: none; width: 600px; background: #ffffff; color: #000000; padding: 15px; font-family: Arial, sans-serif; box-sizing: border-box;">
+    <h2 id="pdfHeaderTitle" style="text-align: center; color: #d90429; margin-bottom: 3px; font-size: 18px;">COSMIC CRACKERS</h2>
+    <p style="text-align: center; font-size: 11px; margin-bottom: 10px;">Sivakasi Wholesale Crackers | Contact: <span id="pdfHeaderPhone">8667784874</span></p>
+    <hr style="margin-bottom: 10px; border: 0; border-top: 1px solid #ccc;" />
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 9px;">
       <thead>
         <tr style="background-color: #f1f1f1;">
-          <th style="border: 1px solid #ccc; padding: 8px;">S.No</th>
-          <th style="border: 1px solid #ccc; padding: 8px;">Product Name</th>
-          <th style="border: 1px solid #ccc; padding: 8px;">Unit</th>
-          <th style="border: 1px solid #ccc; padding: 8px;">Price</th>
-          <th style="border: 1px solid #ccc; padding: 8px;">Qty</th>
-          <th style="border: 1px solid #ccc; padding: 8px;">Subtotal</th>
+          <th style="border: 1px solid #ccc; padding: 4px; width: 8%;">S.No</th>
+          <th style="border: 1px solid #ccc; padding: 4px; width: 42%;">Product Name</th>
+          <th style="border: 1px solid #ccc; padding: 4px; width: 12%;">Unit</th>
+          <th style="border: 1px solid #ccc; padding: 4px; width: 12%;">Price</th>
+          <th style="border: 1px solid #ccc; padding: 4px; width: 10%;">Qty</th>
+          <th style="border: 1px solid #ccc; padding: 4px; width: 16%;">Subtotal</th>
         </tr>
       </thead>
       <tbody id="invoiceTableBody">
         <!-- Dynamically injected -->
       </tbody>
     </table>
-    <div style="text-align: right; margin-bottom: 15px; font-size: 0.95rem; line-height: 1.6;">
+    <div style="text-align: right; margin-bottom: 10px; font-size: 11px; line-height: 1.4;">
       <p><strong>Total Amount: <span id="pdfTotalAmount">₹0.00</span></strong></p>
       <p><strong>Total Savings: <span id="pdfSavings">₹0.00</span></strong></p>
-      <p style="font-size: 1.1rem; color: #d90429;"><strong>Grand Total: <span id="pdfGrandTotal">₹0.00</span></strong></p>
+      <p style="font-size: 13px; color: #d90429;"><strong>Grand Total: <span id="pdfGrandTotal">₹0.00</span></strong></p>
     </div>
-    <div style="text-align: center; margin-top: 25px; padding-top: 15px; border-top: 2px dashed #d90429;">
-      <h3 style="color: #1d3557; font-size: 1.2rem;">Thank you & Happy Diwali! 🪔✨</h3>
-      <p style="margin-top: 5px; font-size: 0.85rem; color: #555;">Cosmic Crackers - Light Up Your Celebrations</p>
+    <div style="text-align: center; margin-top: 15px; padding-top: 10px; border-top: 2px dashed #d90429;">
+      <h3 style="color: #1d3557; font-size: 12px;">Thank you & Happy Diwali! 🪔✨</h3>
+      <p style="margin-top: 3px; font-size: 10px; color: #555;">Cosmic Crackers - Light Up Your Celebrations</p>
     </div>
   </div>
 
@@ -645,12 +645,12 @@
 
           pdfTableHTML += `
             <tr>
-              <td style="border: 1px solid #ccc; padding: 6px; text-align: center;">${count++}</td>
-              <td style="border: 1px solid #ccc; padding: 6px;">${item.name}</td>
-              <td style="border: 1px solid #ccc; padding: 6px; text-align: center;">${item.unit}</td>
-              <td style="border: 1px solid #ccc; padding: 6px; text-align: right;">₹${item.disc.toFixed(2)}</td>
-              <td style="border: 1px solid #ccc; padding: 6px; text-align: center;">${q}</td>
-              <td style="border: 1px solid #ccc; padding: 6px; text-align: right;">₹${subtotal.toFixed(2)}</td>
+              <td style="border: 1px solid #ccc; padding: 3px; text-align: center;">${count++}</td>
+              <td style="border: 1px solid #ccc; padding: 3px;">${item.name}</td>
+              <td style="border: 1px solid #ccc; padding: 3px; text-align: center;">${item.unit}</td>
+              <td style="border: 1px solid #ccc; padding: 3px; text-align: right;">₹${item.disc.toFixed(2)}</td>
+              <td style="border: 1px solid #ccc; padding: 3px; text-align: center;">${q}</td>
+              <td style="border: 1px solid #ccc; padding: 3px; text-align: right;">₹${subtotal.toFixed(2)}</td>
             </tr>
           `;
 
@@ -683,7 +683,7 @@
         margin:       0.3,
         filename:     `Cosmic_Crackers_Bill_${Date.now()}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, logging: false },
+        html2canvas:  { scale: 1.5, useCORS: true, logging: false },
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
 
