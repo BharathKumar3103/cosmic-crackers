@@ -678,7 +678,7 @@
 
       const element = document.getElementById('invoice-template');
       element.style.display = 'block'; // Temporarily show template so browser renders it for capture
-
+      await new Promise(resolve => setTimeout(resolve, 300));
       const opt = {
         margin:       0.3,
         filename:     `Cosmic_Crackers_Bill_${Date.now()}.pdf`,
